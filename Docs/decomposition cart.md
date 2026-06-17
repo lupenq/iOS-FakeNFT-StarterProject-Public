@@ -6,7 +6,7 @@
 Архитектура: MVVM
 Фреймворк: UIKit
 
-Ссылка на task-tracker: https://github.com/users/lupenq/projects/2
+Ссылка на task-tracker: https://github.com/users/lupenq/projects/2/views/6
 
 # Декомпозиция эпика Корзина
 
