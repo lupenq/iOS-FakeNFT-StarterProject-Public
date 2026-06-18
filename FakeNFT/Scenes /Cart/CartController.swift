@@ -19,6 +19,7 @@ final class CartController: UIViewController {
     private lazy var cartTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(CartCell.self)
+        tableView.separatorStyle = .none
         return tableView
     }()
     
