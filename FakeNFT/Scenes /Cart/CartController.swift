@@ -41,7 +41,7 @@ final class CartController: UIViewController {
         cartTableView.dataSource = self
         cartTableView.delegate = self
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .background
         
         setupUI()
         setupConstraints()
@@ -69,7 +69,7 @@ extension CartController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartCell = tableView.dequeueReusableCell()
-        cell.backgroundColor = .systemPink
+        cell.configureCell()
         return cell
     }
     
@@ -80,7 +80,7 @@ extension CartController: UITableViewDataSource {
 
 extension CartController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return CGFloat(140)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
