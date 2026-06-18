@@ -12,7 +12,7 @@ final class TabBarController: UITabBarController {
     
     private let cartTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.cart", comment: ""),
-        image: UIImage(systemName: "basket.fill"),
+        image: UIImage(resource: .basket),
         tag: 1
     )
 
