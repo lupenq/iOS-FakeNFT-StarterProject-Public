@@ -22,7 +22,7 @@ final class TabBarController: UITabBarController {
         let catalogController = TestCatalogViewController(
             servicesAssembly: servicesAssembly
         )
-        let cartController = CartController(
+        let cartController = CartViewController(
             servicesAssembly: servicesAssembly
         )
         
