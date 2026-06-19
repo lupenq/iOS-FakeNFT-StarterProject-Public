@@ -99,6 +99,32 @@ final class CartViewController: UIViewController {
     }
     
     @objc private func filterButtonTapped() {
+        let priceAction = UIAlertAction(
+            title: NSLocalizedString("sort.by.price", comment: ""),
+            style: .default
+        ) { [weak self] _ in
+            print("Сортировка по цене")
+        }
+        
+        let ratingAction = UIAlertAction(
+            title: NSLocalizedString("sort.by.rating", comment: ""),
+            style: .default
+        ) { [weak self] _ in
+            print("Сортировка по рейтингу")
+        }
+        
+        let titleAction = UIAlertAction(
+            title: NSLocalizedString("sort.by.title", comment: ""),
+            style: .default
+        ) { [weak self] _ in
+            print("Сортировка по названию")
+        }
+        
+        showFilterActionSheet(
+            firstAction: priceAction,
+            secondAction: ratingAction,
+            thirdAction: titleAction
+        )
         print("Нажата кнопка фильтрации")
     }
     // MARK: - Private Methods UI
@@ -182,3 +208,39 @@ extension CartViewController: UITableViewDelegate {
 }
 
 
+extension CartViewController {
+    
+    func showFilterActionSheet(
+        firstAction: UIAlertAction,
+        secondAction: UIAlertAction,
+        thirdAction: UIAlertAction
+    ) {
+        let titleOfActionSheet = NSLocalizedString("filter.sort.title", comment: "")
+        let alert = UIAlertController(
+            title: titleOfActionSheet,
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        
+        let textOfCancelButton = NSLocalizedString("common.close", comment: "")
+        let cancelAction = UIAlertAction(title: textOfCancelButton, style: .cancel)
+        
+        [firstAction, secondAction, thirdAction, cancelAction].forEach { alert.addAction($0) }
+        
+        if let popover = alert.popoverPresentationController {
+            popover.sourceView = self.view
+            popover.sourceRect = CGRect(
+                x: self.view.bounds.midX,
+                y: self.view.bounds.midY,
+                width: 0,
+                height: 0)
+            popover.permittedArrowDirections = []
+        }
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true) {
+                print("Action sheet успешно показан")
+            }
+        }
+    }
+}

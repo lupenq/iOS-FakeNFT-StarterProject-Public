@@ -8,3 +8,9 @@
 // MARK: - Cart
 "Tab.cart" = "Корзина";
 "Cart.pay.button" = "К оплате";
+"filter.sort.title" = "Сортировка";
+"common.close" = "Закрыть";
+"sort.by.price" = "По цене";
+"sort.by.rating" = "По рейтингу";
+"sort.by.title" = "По названию";
+
