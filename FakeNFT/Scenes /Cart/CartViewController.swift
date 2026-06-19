@@ -111,6 +111,7 @@ final class CartViewController: UIViewController {
             title: NSLocalizedString("sort.by.price", comment: ""),
             style: .default
         ) { [weak self] _ in
+            self?.viewModel.sortByPrice()
             print("Сортировка по цене")
         }
         
@@ -118,6 +119,7 @@ final class CartViewController: UIViewController {
             title: NSLocalizedString("sort.by.rating", comment: ""),
             style: .default
         ) { [weak self] _ in
+            self?.viewModel.sortByRating()
             print("Сортировка по рейтингу")
         }
         
@@ -125,6 +127,7 @@ final class CartViewController: UIViewController {
             title: NSLocalizedString("sort.by.title", comment: ""),
             style: .default
         ) { [weak self] _ in
+            self?.viewModel.sortByTitle()
             print("Сортировка по названию")
         }
         
