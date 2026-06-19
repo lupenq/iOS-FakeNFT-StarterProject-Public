@@ -71,10 +71,13 @@ final class CartViewController: UIViewController {
         return button
     }()
     
+    private let viewModel: CartViewModel
+    
     // MARK: - Initialisers
     
-    init(servicesAssembly: ServicesAssembly) {
+    init(servicesAssembly: ServicesAssembly, viewModel: CartViewModel) {
         self.servicesAssembly = servicesAssembly
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -186,12 +189,13 @@ final class CartViewController: UIViewController {
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        viewModel.numberOfItems()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartCell = tableView.dequeueReusableCell()
-        cell.configureCell()
+        let item = viewModel.item(at: indexPath.row)
+        cell.configureCell(with: item)
         return cell
     }
     

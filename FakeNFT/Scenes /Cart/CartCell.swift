@@ -86,11 +86,11 @@ final class CartCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Public Methods
     
-    func configureCell() {
-        nftImageView.image = UIImage(resource: .archie)
-        nftTitleLabel.text = "Archie"
-        nftRating = 4
-        nftPriceValueLabel.text = "1,78 ETN"
+    func configureCell(with item: NFTItem) {
+        nftImageView.image = item.image
+        nftTitleLabel.text = item.title
+        nftRating = item.rating
+        nftPriceValueLabel.text = "\(item.price) ETH"
     }
     
     // MARK: - Private Methods
