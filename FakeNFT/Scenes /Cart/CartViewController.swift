@@ -60,6 +60,17 @@ final class CartViewController: UIViewController {
         return view
     }()
     
+    private lazy var filterButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage(resource: .sortLight),
+            style: .plain,
+            target: self,
+            action: #selector(filterButtonTapped)
+        )
+        button.tintColor = .textPrimary
+        return button
+    }()
+    
     // MARK: - Initialisers
     
     init(servicesAssembly: ServicesAssembly) {
@@ -82,11 +93,18 @@ final class CartViewController: UIViewController {
     }
     
     // MARK: - Private Methods
+    
     @objc private func payButtonTapped() {
         print("Нажата кнопка к оплате")
     }
+    
+    @objc private func filterButtonTapped() {
+        print("Нажата кнопка фильтрации")
+    }
     // MARK: - Private Methods UI
+    
     private func setupUI() {
+        navigationItem.rightBarButtonItem = filterButton
         view.addSubview(backgroundPayment)
         backgroundPayment.addSubview(payButton)
         backgroundPayment.addSubview(nftCount)
