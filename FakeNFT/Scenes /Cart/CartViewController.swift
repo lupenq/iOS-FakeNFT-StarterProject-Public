@@ -95,6 +95,10 @@ final class CartViewController: UIViewController {
     // MARK: - Private Methods
     
     @objc private func payButtonTapped() {
+        let deleteModalVC = DeleteModalViewController()
+        deleteModalVC.modalPresentationStyle = .overFullScreen
+        present(deleteModalVC, animated: true)
+        //TODO: перенести в кнопку в ячейке
         print("Нажата кнопка к оплате")
     }
     

@@ -13,4 +13,6 @@
 "sort.by.price" = "По цене";
 "sort.by.rating" = "По рейтингу";
 "sort.by.title" = "По названию";
-
+"DeleteModalVC.title" = "Вы уверены, что хотите\nудалить объект из корзины?";
+"DeleteModalVC.deleteButton" = "Удалить";
+"DeleteModalVC.backButton" = "Вернуться";

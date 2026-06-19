@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CartCell: UITableViewCell, ReuseIdentifying {
+final class CartCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Public Properties
     
@@ -17,7 +17,6 @@ class CartCell: UITableViewCell, ReuseIdentifying {
     
     private lazy var nftImageView: UIImageView = {
         let view = UIImageView(frame: CGRect(x: 0, y: 0, width: 108, height: 108))
-        
         view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = 12
         view.clipsToBounds = true
