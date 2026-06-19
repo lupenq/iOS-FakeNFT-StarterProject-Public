@@ -39,7 +39,6 @@ final class CartViewController: UIViewController {
         let label = UILabel()
         label.font = .caption1
         label.textColor = .textPrimary
-        label.text = "3 NTF"
         return label
     }()
     
@@ -47,7 +46,6 @@ final class CartViewController: UIViewController {
         let label = UILabel()
         label.font = .bodyBold
         label.textColor = .greenUniversal
-        label.text = "5,34 ETH"
         return label
     }()
     
@@ -93,6 +91,9 @@ final class CartViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupTableView()
+        setupBindings()
+        
+        viewModel.updateTotal()
     }
     
     // MARK: - Private Methods
@@ -134,6 +135,19 @@ final class CartViewController: UIViewController {
         )
         print("Нажата кнопка фильтрации")
     }
+    
+    // MARK: - Setup Bindings
+    
+    private func setupBindings() {
+        viewModel.onItemsUpdated = { [weak self] in
+            self?.cartTableView.reloadData()
+        }
+        viewModel.onTotalUpdated = { [weak self] count, total in
+            self?.nftCount.text = count
+            self?.nftTotalPrice.text = total
+        }
+    }
+    
     // MARK: - Private Methods UI
     
     private func setupUI() {
