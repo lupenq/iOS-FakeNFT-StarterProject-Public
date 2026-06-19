@@ -7,11 +7,15 @@
 
 import UIKit
 
+protocol CartCellDelegate: AnyObject {
+    func cartCellDidButtonDeleteTapped(_ cell: CartCell)
+}
+
 final class CartCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Public Properties
     
-    
+    weak var delegate: CartCellDelegate?
     
     // MARK: - Private Properties
     
@@ -95,12 +99,8 @@ final class CartCell: UITableViewCell, ReuseIdentifying {
     
     // MARK: - Private Methods
     
-    @objc private func nftStarTapped(_ sender: UIButton) {
-        
-    }
-    
     @objc private func nftDeleteButtonTapped() {
-        
+        delegate?.cartCellDidButtonDeleteTapped(self)
     }
     
     private func updateStars() {
@@ -126,7 +126,7 @@ final class CartCell: UITableViewCell, ReuseIdentifying {
             button.tag = i
             button.setImage(UIImage(resource: .starNoActive), for: .normal)
             button.setImage(UIImage(resource: .starActive), for: .selected)
-            button.addTarget(self, action: #selector(nftStarTapped(_:)), for: .touchUpInside)
+            //button.addTarget(self, action: #selector(nftStarTapped(_:)), for: .touchUpInside)
             
             button.widthAnchor.constraint(equalToConstant: 12).isActive = true
             button.heightAnchor.constraint(equalToConstant: 12).isActive = true

@@ -12,7 +12,6 @@ final class DeleteModalViewController: UIViewController {
     
     private lazy var nftImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(resource: .nftCart)
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -61,10 +60,25 @@ final class DeleteModalViewController: UIViewController {
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
     
+    private let onDelete: () -> Void
+    
     // MARK: - Initialisers
     
-    ////TODO: добавить передачу картинки nft с корзины которую нужно удалить через init
+    init(
+        image: UIImage?,
+        onDelete: @escaping () -> Void
+    ) {
+        self.onDelete = onDelete
+        super.init(nibName: nil, bundle: nil)
+        self.nftImage.image = image
+        modalPresentationStyle = .overFullScreen
+        modalTransitionStyle = .crossDissolve
+    }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     
     // MARK: - View LifeCycle
     
@@ -79,6 +93,9 @@ final class DeleteModalViewController: UIViewController {
     
     @objc private func deleteButtonTapped() {
         
+        dismiss(animated: true) { [weak self] in
+            self?.onDelete()
+        }
     }
     
     @objc private func backButtonTapped() {
@@ -123,8 +140,4 @@ final class DeleteModalViewController: UIViewController {
         ])
     }
     
-}
-
-#Preview {
-    DeleteModalViewController()
 }

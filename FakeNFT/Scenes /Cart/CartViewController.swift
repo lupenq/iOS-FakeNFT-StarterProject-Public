@@ -99,11 +99,7 @@ final class CartViewController: UIViewController {
     // MARK: - Private Methods
     
     @objc private func payButtonTapped() {
-        let deleteModalVC = DeleteModalViewController()
-        deleteModalVC.modalPresentationStyle = .overFullScreen
-        present(deleteModalVC, animated: true)
-        //TODO: перенести в кнопку в ячейке
-        print("Нажата кнопка к оплате")
+        
     }
     
     @objc private func filterButtonTapped() {
@@ -213,6 +209,7 @@ extension CartViewController: UITableViewDataSource {
         let cell: CartCell = tableView.dequeueReusableCell()
         let item = viewModel.item(at: indexPath.row)
         cell.configureCell(with: item)
+        cell.delegate = self
         return cell
     }
     
@@ -231,6 +228,27 @@ extension CartViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
+
+extension CartViewController: CartCellDelegate {
+    func cartCellDidButtonDeleteTapped(_ cell: CartCell) {
+        guard let indexPath = cartTableView.indexPath(for: cell) else { return }
+        
+        let item = viewModel.item(at: indexPath.row)
+        
+        let deleteModalVC = DeleteModalViewController(
+            image: item.image,
+            onDelete: { [weak self] in
+                guard let self else { return }
+                self.viewModel.removeItem(at: indexPath.row)
+                self.cartTableView.reloadData()
+            }
+        )
+        deleteModalVC.modalPresentationStyle = .overFullScreen
+        deleteModalVC.modalTransitionStyle = .crossDissolve
+        present(deleteModalVC, animated: true)
+    }
+}
+
 
 
 extension CartViewController {
