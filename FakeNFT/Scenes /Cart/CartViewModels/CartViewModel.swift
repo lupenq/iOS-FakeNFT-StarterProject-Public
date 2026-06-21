@@ -14,13 +14,16 @@ final class CartViewModel {
     var onItemsUpdated: (() -> Void)?
     var onTotalUpdated: ((String, String) -> Void)?
     
+    // MARK: - Public Properties
+    
+    var itemsAmount: Int { items.count }
+    
     // MARK: - Private Properties
     
     private(set) var items = MockData.items
     
     // MARK: - Public Methods
     
-    func numberOfItems() -> Int { items.count }
     func item(at index: Int) -> NFTItem { items[index] }
     
     func removeItem(at index: Int) {
