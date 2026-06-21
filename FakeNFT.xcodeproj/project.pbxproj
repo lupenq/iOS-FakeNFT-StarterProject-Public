@@ -354,12 +354,11 @@
 		BC061DFA2FE34E2B00EED055 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
+				BC061F722FE7E9FC00EED055 /* Cells */,
+				BC061F712FE7E9E900EED055 /* VC */,
 				BC061F6B2FE55E7200EED055 /* MockData */,
 				BC061EF42FE55C1E00EED055 /* CartViewModels */,
 				BC061EF32FE55C1800EED055 /* CartModels */,
-				BC061DFB2FE34ED700EED055 /* CartViewController.swift */,
-				BC061DFD2FE358EB00EED055 /* CartCell.swift */,
-				BC061EE32FE5392500EED055 /* DeleteModalViewController.swift */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -386,6 +385,23 @@
 				BC061F6C2FE55EAC00EED055 /* MockData.swift */,
 			);
 			path = MockData;
+			sourceTree = "<group>";
+		};
+		BC061F712FE7E9E900EED055 /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				BC061EE32FE5392500EED055 /* DeleteModalViewController.swift */,
+				BC061DFB2FE34ED700EED055 /* CartViewController.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
+		};
+		BC061F722FE7E9FC00EED055 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				BC061DFD2FE358EB00EED055 /* CartCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
