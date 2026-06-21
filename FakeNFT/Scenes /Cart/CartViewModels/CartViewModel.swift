@@ -29,12 +29,6 @@ final class CartViewModel {
         notifyUpdates()
     }
     
-    func updateRating(at index: Int, rating: Int) {
-        guard items.indices.contains(index) else { return }
-        items[index].rating = rating
-        notifyUpdates()
-    }
-    
     func updateTotal() {
         let countText = "\(items.count) NFT"
         let sum = items.reduce(0) { $0 + $1.price }

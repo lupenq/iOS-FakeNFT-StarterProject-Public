@@ -11,6 +11,6 @@ struct NFTItem {
     let id: UUID = UUID()
     let image: UIImage?
     let title: String
-    var rating: Int
+    let rating: Int
     let price: Double
 }
