@@ -9,6 +9,12 @@ final class TabBarController: UITabBarController {
         image: UIImage(systemName: "square.stack.3d.up.fill"),
         tag: 0
     )
+    
+    private let cartTabBarItem = UITabBarItem(
+        title: NSLocalizedString("Tab.cart", comment: ""),
+        image: UIImage(resource: .basket),
+        tag: 1
+    )
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,9 +22,20 @@ final class TabBarController: UITabBarController {
         let catalogController = TestCatalogViewController(
             servicesAssembly: servicesAssembly
         )
+        
+        let viewModel = CartViewModel()
+        
+        let cartController = CartViewController(
+            servicesAssembly: servicesAssembly,
+            viewModel: viewModel
+        )
+        
         catalogController.tabBarItem = catalogTabBarItem
+        cartController.tabBarItem = cartTabBarItem
+        
+        let cartNavigationController = UINavigationController(rootViewController: cartController)
 
-        viewControllers = [catalogController]
+        viewControllers = [catalogController, cartNavigationController]
 
         view.backgroundColor = .systemBackground
     }
