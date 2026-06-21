@@ -84,8 +84,9 @@ final class CartCell: UITableViewCell, ReuseIdentifying {
         setupConstraints()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        nil
     }
     
     // MARK: - Public Methods
@@ -126,7 +127,6 @@ final class CartCell: UITableViewCell, ReuseIdentifying {
             button.tag = i
             button.setImage(UIImage(resource: .starNoActive), for: .normal)
             button.setImage(UIImage(resource: .starActive), for: .selected)
-            //button.addTarget(self, action: #selector(nftStarTapped(_:)), for: .touchUpInside)
             
             button.widthAnchor.constraint(equalToConstant: 12).isActive = true
             button.heightAnchor.constraint(equalToConstant: 12).isActive = true

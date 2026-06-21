@@ -79,8 +79,9 @@ final class CartViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        nil
     }
     
     // MARK: - View LifeCycle
@@ -108,7 +109,6 @@ final class CartViewController: UIViewController {
             style: .default
         ) { [weak self] _ in
             self?.viewModel.sortByPrice()
-            print("Сортировка по цене")
         }
         
         let ratingAction = UIAlertAction(
@@ -116,7 +116,6 @@ final class CartViewController: UIViewController {
             style: .default
         ) { [weak self] _ in
             self?.viewModel.sortByRating()
-            print("Сортировка по рейтингу")
         }
         
         let titleAction = UIAlertAction(
@@ -124,7 +123,6 @@ final class CartViewController: UIViewController {
             style: .default
         ) { [weak self] _ in
             self?.viewModel.sortByTitle()
-            print("Сортировка по названию")
         }
         
         showFilterActionSheet(
@@ -132,7 +130,6 @@ final class CartViewController: UIViewController {
             secondAction: ratingAction,
             thirdAction: titleAction
         )
-        print("Нажата кнопка фильтрации")
     }
     
     // MARK: - Setup Bindings
