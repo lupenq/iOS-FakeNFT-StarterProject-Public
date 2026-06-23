@@ -58,7 +58,6 @@ extension PaymentViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: PaymentCell = collectionView.dequeueReusableCell(indexPath: indexPath)
-        cell.backgroundColor = .systemRed
         return cell
     }
     
