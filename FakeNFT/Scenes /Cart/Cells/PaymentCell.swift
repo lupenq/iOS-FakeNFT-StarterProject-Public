@@ -57,7 +57,11 @@ class PaymentCell: UICollectionViewCell, ReuseIdentifying {
     
     // MARK: - Public Methods
     
-    
+    func configureCell(with item: Currency) {
+        currencyImageView.image = item.image
+        currencyTitleLabel.text = item.title
+        currencyAcronymTitleLabel.text = item.shortTitle
+    }
     
     // MARK: - Private Methods
     

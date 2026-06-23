@@ -7,9 +7,12 @@
 
 import UIKit
 
-class PaymentViewController: UIViewController {
+final class PaymentViewController: UIViewController {
     // MARK: - Public Properties
     
+    
+    
+    // MARK: - Private Properties
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 7
@@ -19,9 +22,19 @@ class PaymentViewController: UIViewController {
         return collectionView
     }()
     
-    // MARK: - Private Properties
+    private let viewModel: PaymentViewModel
     
+    // MARK: - Initialisers
     
+    init(viewModel: PaymentViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        nil
+    }
     
     // MARK: - View LifeCycle
     override func viewDidLoad() {
@@ -58,6 +71,7 @@ extension PaymentViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: PaymentCell = collectionView.dequeueReusableCell(indexPath: indexPath)
+        cell.configureCell(with: viewModel.items[indexPath.item])
         return cell
     }
     
@@ -76,5 +90,5 @@ extension PaymentViewController: UICollectionViewDelegateFlowLayout {
 }
 
 #Preview {
-    PaymentViewController()
+    PaymentViewController(viewModel: PaymentViewModel())
 }
