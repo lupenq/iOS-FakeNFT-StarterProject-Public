@@ -122,6 +122,17 @@
         }
       }
     },
+    "PaymentVC.choose a payment methods" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите способ оплаты"
+          }
+        }
+      }
+    },
     "PaymentVC.UserAgreement" : {
       "extractionState" : "manual",
       "localizations" : {

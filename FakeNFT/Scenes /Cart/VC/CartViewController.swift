@@ -100,7 +100,11 @@ final class CartViewController: UIViewController {
     // MARK: - Private Methods
     
     @objc private func payButtonTapped() {
-        
+        let paymentViewModel = PaymentViewModel()
+            
+        let paymentVC = PaymentViewController(viewModel: paymentViewModel)
+        paymentVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(paymentVC, animated: true)
     }
     
     @objc private func filterButtonTapped() {

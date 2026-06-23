@@ -72,10 +72,12 @@ final class PaymentViewController: UIViewController {
     // MARK: - View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCollectionView()
+        view.backgroundColor = .background
+        setupNavBar()
         setupTerms()
         setupUI()
         setupConstraints()
+        setupCollectionView()
     }
     
     // MARK: - Public Methods
@@ -87,7 +89,9 @@ final class PaymentViewController: UIViewController {
         
     }
     
-    
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
     // MARK: - Private Methods UI
     private func setupCollectionView() {
         collectionView.dataSource = self
@@ -98,7 +102,7 @@ final class PaymentViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),//TODO: изменить после добавления нижнего блока
+            collectionView.bottomAnchor.constraint(equalTo: backgroundPayment.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
@@ -168,7 +172,25 @@ final class PaymentViewController: UIViewController {
         ])
     }
     
-    
+    private func setupNavBar() {
+        let backButton = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left"),
+            style: .plain,
+            target: self,
+            action: #selector(backButtonTapped)
+        )
+        
+        backButton.tintColor = UIColor.segmentActive
+        navigationItem.leftBarButtonItem = backButton
+        
+        let title = UILabel()
+        title.text = NSLocalizedString("PaymentVC.choose a payment methods", comment: "")
+        title.font = .bodyBold
+        title.textColor = .segmentActive
+        title.textAlignment = .center
+        navigationItem.titleView = title
+    }
+
 }
 
 
