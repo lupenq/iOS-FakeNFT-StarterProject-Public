@@ -13,6 +13,7 @@ final class PaymentViewController: UIViewController {
     
     
     // MARK: - Private Properties
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 7
@@ -70,6 +71,7 @@ final class PaymentViewController: UIViewController {
     }
     
     // MARK: - View LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .background
@@ -92,7 +94,9 @@ final class PaymentViewController: UIViewController {
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
     // MARK: - Private Methods UI
+    
     private func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -116,7 +120,6 @@ final class PaymentViewController: UIViewController {
         paragraphStyle.minimumLineHeight = 18
         paragraphStyle.maximumLineHeight = 18
         
-        // Создаём атрибутированный текст
         let attributedString = NSMutableAttributedString(
             string: fullText,
             attributes: [
@@ -126,22 +129,15 @@ final class PaymentViewController: UIViewController {
                 .foregroundColor: UIColor.textPrimary
             ]
         )
-        // Находим диапазон для ссылки
+        
         let range = (fullText as NSString).range(of: highlightText)
         if range.location != NSNotFound {
-            // Корректный URL с правильным протоколом
             let url = URL(string: "https://yandex.ru/legal/practicum_termsofuse")!
             attributedString.addAttribute(.link, value: url, range: range)
         }
-        
-        // Применяем текст к textView
         userTermsTextView.attributedText = attributedString
-        // Настройки отображения ссылок
-        userTermsTextView.linkTextAttributes = [
-            .foregroundColor: UIColor.systemBlue,
-            .underlineStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
-        ]
-        // Устанавливаем делегат для обработки кликов
+        userTermsTextView.linkTextAttributes = [.foregroundColor: UIColor.systemBlue]
+        
         userTermsTextView.delegate = self
     }
     
