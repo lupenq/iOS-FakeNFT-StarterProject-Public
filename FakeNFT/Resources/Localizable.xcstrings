@@ -1,6 +1,17 @@
 {
   "sourceLanguage" : "ru",
   "strings" : {
+    "Cart.paid.button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оплатить"
+          }
+        }
+      }
+    },
     "Cart.pay.button" : {
       "localizations" : {
         "ru" : {
@@ -107,6 +118,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сортировка"
+          }
+        }
+      }
+    },
+    "PaymentVC.UserAgreement" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пользовательского соглашения"
+          }
+        }
+      }
+    },
+    "PaymentVC.UserAgreementTerms" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Совершая покупку, вы соглашаетесь с условиями Пользовательского соглашения"
           }
         }
       }

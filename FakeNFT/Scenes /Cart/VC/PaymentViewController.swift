@@ -22,6 +22,39 @@ final class PaymentViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var payButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(NSLocalizedString("Cart.paid.button", comment: ""), for: .normal)
+        button.setTitleColor(.textOnPrimary, for: .normal)
+        button.backgroundColor = .textPrimary
+        button.titleLabel?.font = .bodyBold
+        button.addTarget(self, action: #selector(payButtonTapped), for: .touchUpInside)
+        button.layer.cornerRadius = 16
+        button.clipsToBounds = true
+        return button
+    }()
+    
+    private lazy var userTermsTextView: UITextView = {
+        let tv = UITextView()
+        tv.isEditable = false
+        tv.isScrollEnabled = false
+        tv.backgroundColor = .clear
+        tv.font = .caption2
+        tv.textColor = .textPrimary
+        tv.dataDetectorTypes = .link
+        tv.isUserInteractionEnabled = true
+        return tv
+    }()
+    
+    private lazy var backgroundPayment: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 12
+        view.clipsToBounds = true
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.backgroundColor = .segmentInactive
+        return view
+    }()
+    
     private let viewModel: PaymentViewModel
     
     // MARK: - Initialisers
@@ -40,13 +73,22 @@ final class PaymentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        setupTerms()
+        setupUI()
+        setupConstraints()
     }
     
     // MARK: - Public Methods
     
     
-    
     // MARK: - Private Methods
+    
+    @objc private func payButtonTapped() {
+        
+    }
+    
+    
+    // MARK: - Private Methods UI
     private func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -62,7 +104,75 @@ final class PaymentViewController: UIViewController {
         ])
     }
     
+    private func setupTerms() {
+        let fullText = NSLocalizedString("PaymentVC.UserAgreementTerms", comment: "")
+        let highlightText = NSLocalizedString("PaymentVC.UserAgreement", comment: "")
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.minimumLineHeight = 18
+        paragraphStyle.maximumLineHeight = 18
+        
+        // Создаём атрибутированный текст
+        let attributedString = NSMutableAttributedString(
+            string: fullText,
+            attributes: [
+                .paragraphStyle: paragraphStyle,
+                .kern: -0.08,
+                .font: UIFont.caption2,
+                .foregroundColor: UIColor.textPrimary
+            ]
+        )
+        // Находим диапазон для ссылки
+        let range = (fullText as NSString).range(of: highlightText)
+        if range.location != NSNotFound {
+            // Корректный URL с правильным протоколом
+            let url = URL(string: "https://yandex.ru/legal/practicum_termsofuse")!
+            attributedString.addAttribute(.link, value: url, range: range)
+        }
+        
+        // Применяем текст к textView
+        userTermsTextView.attributedText = attributedString
+        // Настройки отображения ссылок
+        userTermsTextView.linkTextAttributes = [
+            .foregroundColor: UIColor.systemBlue,
+            .underlineStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
+        ]
+        // Устанавливаем делегат для обработки кликов
+        userTermsTextView.delegate = self
+    }
+    
+    private func setupUI() {
+        view.addSubview(backgroundPayment)
+        view.addSubview(payButton)
+        view.addSubview(userTermsTextView)
+        
+        [backgroundPayment, payButton, userTermsTextView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+    }
+    
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            backgroundPayment.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundPayment.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundPayment.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            backgroundPayment.heightAnchor.constraint(equalToConstant: 186),
+            
+            payButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            payButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            payButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            payButton.heightAnchor.constraint(equalToConstant: 60),
+            
+            userTermsTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            userTermsTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            userTermsTextView.topAnchor.constraint(equalTo: backgroundPayment.topAnchor, constant: 10),
+            userTermsTextView.bottomAnchor.constraint(equalTo: payButton.topAnchor, constant: 16)
+        ])
+    }
+    
+    
 }
+
+
+// MARK: - UICollectionViewDataSource
 
 extension PaymentViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -78,6 +188,9 @@ extension PaymentViewController: UICollectionViewDataSource {
     
 }
 
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
 extension PaymentViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let spacing: CGFloat = 7
@@ -88,6 +201,16 @@ extension PaymentViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: widthPerItem, height: 46)
     }
 }
+
+// MARK: - UITextViewDelegate
+
+extension PaymentViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith url: URL, in characterRange: NSRange) -> Bool {
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        return false
+    }
+}
+
 
 #Preview {
     PaymentViewController(viewModel: PaymentViewModel())
