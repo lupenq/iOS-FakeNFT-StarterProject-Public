@@ -1,6 +1,17 @@
 {
   "sourceLanguage" : "ru",
   "strings" : {
+    "Back.to.cart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуться в корзину"
+          }
+        }
+      }
+    },
     "Cart.paid.button" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -181,6 +192,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "По названию"
+          }
+        }
+      }
+    },
+    "Successful payment" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Успех! Оплата прошла,\nпоздравляем с покупкой!"
           }
         }
       }

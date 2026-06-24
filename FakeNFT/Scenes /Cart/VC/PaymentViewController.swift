@@ -88,7 +88,9 @@ final class PaymentViewController: UIViewController {
     // MARK: - Private Methods
     
     @objc private func payButtonTapped() {
-        
+        let successVC = SuccessfulPaymentVC()
+        successVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(successVC, animated: true)
     }
     
     @objc private func backButtonTapped() {
