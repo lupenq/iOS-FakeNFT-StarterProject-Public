@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SuccessfulPaymentVC: UIViewController {
+final class SuccessfulPaymentVC: UIViewController {
     
     // MARK: - Private Properties
     

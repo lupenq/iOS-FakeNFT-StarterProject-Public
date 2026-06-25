@@ -12,6 +12,17 @@
         }
       }
     },
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отмена"
+          }
+        }
+      }
+    },
     "Cart.paid.button" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -133,6 +144,17 @@
         }
       }
     },
+    "Payment Failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось произвести оплату"
+          }
+        }
+      }
+    },
     "PaymentVC.choose a payment methods" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -162,6 +184,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Совершая покупку, вы соглашаетесь с условиями Пользовательского соглашения"
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторить"
           }
         }
       }

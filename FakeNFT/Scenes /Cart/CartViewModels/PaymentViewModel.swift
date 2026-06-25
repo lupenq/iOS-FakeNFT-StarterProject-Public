@@ -11,7 +11,8 @@ final class PaymentViewModel {
     
     // MARK: - Output bindings
     
-    
+    var onSuccess: (() -> Void)?
+    var onError: ((_ retryHandler: @escaping () -> Void) -> Void)?
     
     // MARK: - Public Properties
     
@@ -26,5 +27,16 @@ final class PaymentViewModel {
     
     func selectedIndex(at indexPath: IndexPath) {
         selectedIndex = indexPath
+    }
+    
+    func pay() {
+        let success = Bool.random()
+        if success {
+            onSuccess?()
+        } else {
+            onError? { [weak self] in
+                self?.pay()
+            }
+        }
     }
 }

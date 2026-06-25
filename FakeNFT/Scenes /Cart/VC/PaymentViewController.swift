@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class PaymentViewController: UIViewController {
+    
     // MARK: - Public Properties
     
     
@@ -80,17 +82,43 @@ final class PaymentViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupCollectionView()
+        bindViewModel()
     }
     
     // MARK: - Public Methods
     
+    // MARK: - BindViewModel
     
-    // MARK: - Private Methods
+    private func bindViewModel() {
+        viewModel.onSuccess = { [weak self] in
+            ProgressHUD.dismiss()
+            let successVC = SuccessfulPaymentVC()
+            successVC.hidesBottomBarWhenPushed = true
+            self?.navigationController?.pushViewController(successVC, animated: true)
+        }
+        viewModel.onError = { [weak self] retryHandler in
+            ProgressHUD.dismiss()
+            let alertTitle = NSLocalizedString("Payment Failed", comment: "")
+            let retryTitle = NSLocalizedString("Retry", comment: "")
+            let cancelTitle = NSLocalizedString("Cancel", comment: "")
+            
+            let alert = UIAlertController(title: alertTitle, message: "", preferredStyle: .alert)
+            
+            let retry = UIAlertAction(title: retryTitle, style: .default) { _ in
+                retryHandler()
+            }
+            alert.addAction(retry)
+            alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel))
+            self?.present(alert, animated: true)
+        }
+    }
+    
+    
+    // MARK: - Private Methods Actions
     
     @objc private func payButtonTapped() {
-        let successVC = SuccessfulPaymentVC()
-        successVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(successVC, animated: true)
+        ProgressHUD.show()
+        viewModel.pay()
     }
     
     @objc private func backButtonTapped() {
