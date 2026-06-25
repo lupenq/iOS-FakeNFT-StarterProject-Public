@@ -97,6 +97,12 @@ final class CartViewController: UIViewController {
         viewModel.updateTotal()
     }
     
+    // MARK: - Public methods
+    
+    func clearCart() {
+        viewModel.removeAllItems()
+    }
+    
     // MARK: - Private Methods
     
     @objc private func payButtonTapped() {

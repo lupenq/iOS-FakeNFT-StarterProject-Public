@@ -53,7 +53,12 @@ final class SuccessfulPaymentVC: UIViewController {
     // MARK: - Private Methods
     
     @objc private func backToCart() {
-        navigationController?.popToRootViewController(animated: true)
+        tabBarController?.selectedIndex = 1
+        if let nav = tabBarController?.viewControllers?[1] as? UINavigationController,
+           let cartVC = nav.viewControllers.first as? CartViewController {
+            cartVC.clearCart()
+            nav.popToRootViewController(animated: true)
+        }
     }
     
     // MARK: - Private Methods UI
