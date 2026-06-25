@@ -220,6 +220,10 @@ extension PaymentViewController: UICollectionViewDelegateFlowLayout {
         let widthPerItem = availableWidth / cell
         return CGSize(width: widthPerItem, height: 46)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewModel.selectedIndex(at: indexPath)
+    }
 }
 
 // MARK: - UITextViewDelegate

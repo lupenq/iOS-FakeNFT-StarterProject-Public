@@ -55,6 +55,15 @@ class PaymentCell: UICollectionViewCell, ReuseIdentifying {
         nil
     }
     
+    // MARK: - Override Methods
+    
+    override var isSelected: Bool {
+        didSet {
+            contentView.layer.borderWidth = isSelected ? 1 : 0
+            contentView.layer.borderColor = isSelected ?  UIColor.black.cgColor : UIColor.segmentInactive.cgColor
+        }
+    }
+    
     // MARK: - Public Methods
     
     func configureCell(with item: Currency) {

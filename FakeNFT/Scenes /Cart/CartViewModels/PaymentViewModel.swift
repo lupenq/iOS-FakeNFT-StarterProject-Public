@@ -20,5 +20,11 @@ final class PaymentViewModel {
     // MARK: - Private Properties
     
     private(set) var items: [Currency] = MockCurrency.items
+    private(set) var selectedIndex: IndexPath?
     
+    // MARK: - Public Methods
+    
+    func selectedIndex(at indexPath: IndexPath) {
+        selectedIndex = indexPath
+    }
 }
