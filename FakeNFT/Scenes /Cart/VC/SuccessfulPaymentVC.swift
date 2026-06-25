@@ -57,6 +57,7 @@ final class SuccessfulPaymentVC: UIViewController {
         if let nav = tabBarController?.viewControllers?[1] as? UINavigationController,
            let cartVC = nav.viewControllers.first as? CartViewController {
             cartVC.clearCart()
+            cartVC.updateEmptyStateUI()
             nav.popToRootViewController(animated: true)
         }
     }

@@ -94,6 +94,17 @@
         }
       }
     },
+    "Empty label cart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Корзина пуста"
+          }
+        }
+      }
+    },
     "Error.network" : {
       "localizations" : {
         "ru" : {
