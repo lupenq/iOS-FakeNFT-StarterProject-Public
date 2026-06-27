@@ -25,7 +25,7 @@ final class PaymentViewModel {
     
     // MARK: - Public Methods
     
-    func selectedIndex(at indexPath: IndexPath) {
+    func selectItem(at indexPath: IndexPath) {
         selectedIndex = indexPath
     }
     
