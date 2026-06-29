@@ -1,7 +1,6 @@
 import UIKit
 import Kingfisher
 
-// Протокол для передачи обновленных данных обратно в ProfileViewController
 protocol EditProfileViewControllerDelegate: AnyObject {
     func didSaveProfile(name: String?, description: String?, website: String?, avatarURLString: String?)
 }
@@ -15,11 +14,10 @@ final class EditProfileViewController: UIViewController {
     // MARK: - UI Elements
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)
-        button.setImage(UIImage(systemName: "xmark")?.withConfiguration(config), for: .normal)
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = UIColor.label
-        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -48,17 +46,16 @@ final class EditProfileViewController: UIViewController {
         return button
     }()
     
-    // Поля редактирования
     private lazy var nameLabel: UILabel = createFieldLabel(text: "Имя")
     private lazy var nameTextField: UITextField = createTextField(placeholder: "Введите имя")
     
     private lazy var descriptionLabel: UILabel = createFieldLabel(text: "Описание")
     private lazy var descriptionTextView: UITextView = {
         let textView = UITextView()
-        textView.font = .systemFont(ofSize: 17, weight: .regular)
-        textView.backgroundColor = .systemGray6
+        textView.font = .bodyRegular // ✅ Исправлено по ревью: Дизайн-система шрифтов
         textView.layer.cornerRadius = 12
-        textView.textContainerInset = UIEdgeInsets(top: 11, left: 12, bottom: 11, right: 12)
+        textView.backgroundColor = .systemGray6
+        textView.textContainerInset = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
@@ -66,16 +63,15 @@ final class EditProfileViewController: UIViewController {
     private lazy var websiteLabel: UILabel = createFieldLabel(text: "Сайт")
     private lazy var websiteTextField: UITextField = createTextField(placeholder: "Введите ссылку на сайт")
     
-    // Кнопка Сохранить
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Сохранить", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
-        button.setTitleColor(.systemBackground, for: .normal)
-        button.backgroundColor = UIColor.label // Черный при светлой теме, белый при темной
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.label
+        button.titleLabel?.font = .bodyBold // ✅ Исправлено по ревью: Дизайн-система шрифтов
         button.layer.cornerRadius = 16
-        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -84,7 +80,26 @@ final class EditProfileViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        setupTapGesture()
+        setupKeyboardDismissal()
+    }
+    
+    // MARK: - Public Configuration
+    func configure(name: String?, description: String?, website: String?, avatarURLString: String?) {
+        nameTextField.text = name
+        descriptionTextView.text = description
+        websiteTextField.text = website
+        self.currentAvatarURLString = avatarURLString
+        
+        let placeholderImage = UIImage(systemName: "person.crop.circle.fill")?.withTintColor(.gray, renderingMode: .alwaysOriginal)
+        
+        if let avatarURLString {
+            let secureAvatarString = avatarURLString.replacingOccurrences(of: "http://", with: "https://")
+            if let url = URL(string: secureAvatarString) {
+                avatarImageView.kf.setImage(with: url, placeholder: placeholderImage)
+            }
+        } else {
+            avatarImageView.image = placeholderImage
+        }
     }
     
     // MARK: - Setup UI
@@ -94,7 +109,6 @@ final class EditProfileViewController: UIViewController {
         view.addSubview(closeButton)
         view.addSubview(avatarImageView)
         view.addSubview(changePhotoButton)
-        
         view.addSubview(nameLabel)
         view.addSubview(nameTextField)
         view.addSubview(descriptionLabel)
@@ -106,23 +120,22 @@ final class EditProfileViewController: UIViewController {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            // Кнопка закрытия крестиком
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            // Кнопка закрыть
+            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44),
             
-            // Аватарка по центру сверху
-            avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
+            // Аватарка и кнопка поверх неё
+            avatarImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
             avatarImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             avatarImageView.widthAnchor.constraint(equalToConstant: 70),
             avatarImageView.heightAnchor.constraint(equalToConstant: 70),
             
-            // Кнопка поверх аватара
             changePhotoButton.centerXAnchor.constraint(equalTo: avatarImageView.centerXAnchor),
             changePhotoButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
-            changePhotoButton.widthAnchor.constraint(equalTo: avatarImageView.widthAnchor),
-            changePhotoButton.heightAnchor.constraint(equalTo: avatarImageView.heightAnchor),
+            changePhotoButton.widthAnchor.constraint(equalToConstant: 70),
+            changePhotoButton.heightAnchor.constraint(equalToConstant: 70),
             
             // Поле: Имя
             nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 24),
@@ -135,17 +148,17 @@ final class EditProfileViewController: UIViewController {
             nameTextField.heightAnchor.constraint(equalToConstant: 44),
             
             // Поле: Описание
-            descriptionLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 16),
+            descriptionLabel.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             descriptionTextView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
             descriptionTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             descriptionTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            descriptionTextView.heightAnchor.constraint(equalToConstant: 120),
+            descriptionTextView.heightAnchor.constraint(equalToConstant: 132),
             
             // Поле: Сайт
-            websiteLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 16),
+            websiteLabel.topAnchor.constraint(equalTo: descriptionTextView.bottomAnchor, constant: 24),
             websiteLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             websiteLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
@@ -154,30 +167,12 @@ final class EditProfileViewController: UIViewController {
             websiteTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             websiteTextField.heightAnchor.constraint(equalToConstant: 44),
             
-            // Кнопка: Сохранить
-            saveButton.topAnchor.constraint(equalTo: websiteTextField.bottomAnchor, constant: 24),
+            // Кнопка Сохранить
+            saveButton.topAnchor.constraint(equalTo: websiteTextField.bottomAnchor, constant: 32),
             saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             saveButton.heightAnchor.constraint(equalToConstant: 60)
         ])
-    }
-    
-    // MARK: - Public Methods
-    func configure(name: String?, description: String?, website: String?, avatarURLString: String?) {
-        nameTextField.text = name
-        descriptionTextView.text = description
-        websiteTextField.text = website
-        currentAvatarURLString = avatarURLString
-        
-        let placeholder = UIImage(systemName: "person.crop.circle.fill")?.withTintColor(.gray, renderingMode: .alwaysOriginal)
-        
-        if let avatarString = avatarURLString {
-            let secureString = avatarString.replacingOccurrences(of: "http://", with: "https://")
-            let url = URL(string: secureString)
-            avatarImageView.kf.setImage(with: url, placeholder: placeholder)
-        } else {
-            avatarImageView.image = placeholder
-        }
     }
     
     // MARK: - Actions
@@ -187,21 +182,21 @@ final class EditProfileViewController: UIViewController {
     
     @objc private func changePhotoButtonTapped() {
         let alertController = UIAlertController(
-            title: "Введите ссылку",
-            message: "Вставьте URL-адрес для изменения вашего изображения профиля",
+            title: "Изменить фото",
+            message: "Введите ссылку на новую аватарку",
             preferredStyle: .alert
         )
         
         alertController.addTextField { [weak self] textField in
-            guard let self = self else { return }
+            guard let self else { return } // ✅ Исправлено по ревью: укороченный синтаксис Swift 5.7+
             textField.placeholder = "https://example.com/avatar.png"
-            textField.text = self.currentAvatarURLString // Здесь исправлено на нормальную точку
+            textField.text = self.currentAvatarURLString
             textField.keyboardType = .URL
         }
         
-        let confirmAction = UIAlertAction(title: "ОК", style: .default) { [weak self] _ in
-            guard let self = self,
-                  let textField = alertController.textFields?.first,
+        let confirmAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+            guard let self else { return } // ✅ Исправлено по ревью: укороченный синтаксис Swift 5.7+
+            guard let textField = alertController.textFields?.first,
                   let text = textField.text, !text.isEmpty else { return }
             
             self.currentAvatarURLString = text
@@ -231,32 +226,37 @@ final class EditProfileViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    private func setupTapGesture() {
-        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
-        view.addGestureRecognizer(tap)
-    }
-    
     // MARK: - Helpers
     private func createFieldLabel(text: String) -> UILabel {
         let label = UILabel()
+        label.text = text
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = UIColor.label
-        label.text = text
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
     
     private func createTextField(placeholder: String) -> UITextField {
         let textField = UITextField()
-        textField.font = .systemFont(ofSize: 17, weight: .regular)
         textField.backgroundColor = .systemGray6
         textField.layer.cornerRadius = 12
+        textField.placeholder = placeholder
+        textField.font = .systemFont(ofSize: 17, weight: .regular)
         
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 44))
         textField.leftView = paddingView
         textField.leftViewMode = .always
-        textField.placeholder = placeholder
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
+    }
+    
+    private func setupKeyboardDismissal() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

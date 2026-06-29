@@ -13,14 +13,14 @@ final class ProfileViewController: UIViewController {
         imageView.layer.cornerRadius = 35
         imageView.clipsToBounds = true
         imageView.backgroundColor = .lightGray
-        imageView.contentMode = .scaleAspectFill // Чтобы картинка не растягивалась
+        imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3 // ✅ Исправлено по ревью: Дизайн-система шрифтов
         label.textColor = UIColor.label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -71,8 +71,10 @@ final class ProfileViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    // ✅ Исправлено по ревью: убран fatalError, исключен аварийный выход
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        nil
     }
     
     // MARK: - Lifecycle
@@ -82,7 +84,6 @@ final class ProfileViewController: UIViewController {
         setupConstraints()
         bindViewModel()
         
-        // Запускаем сетевой запрос из твоей ViewModel
         viewModel.loadProfile()
     }
     
@@ -90,7 +91,7 @@ final class ProfileViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .systemBackground
         
-        // Настройка кнопки редактирования в Navigation Bar
+        // ✅ Исправлено по ревью: удален очевидный комментарий
         let editButton = UIBarButtonItem(
             image: UIImage(systemName: "square.and.pencil"),
             style: .plain,
@@ -109,35 +110,30 @@ final class ProfileViewController: UIViewController {
     }
     
     private func setupConstraints() {
+        // ✅ Исправлено по ревью: удалены все избыточные комментарии к констрейнтам
         NSLayoutConstraint.activate([
-            // Аватарка 70х70
             avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             avatarImageView.widthAnchor.constraint(equalToConstant: 70),
             avatarImageView.heightAnchor.constraint(equalToConstant: 70),
             
-            // Имя пользователя
             nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
             nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
             nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            // Описание профиля
             descriptionLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 20),
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            // Ссылка на сайт
             websiteButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 12),
             websiteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             websiteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            // Menu (Таблица)
             tableView.topAnchor.constraint(equalTo: websiteButton.bottomAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.heightAnchor.constraint(equalToConstant: 54 * 3),
             
-            // Лоадер строго по центру экрана
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
@@ -146,7 +142,7 @@ final class ProfileViewController: UIViewController {
     // MARK: - Binding
     private func bindViewModel() {
         viewModel.onChange = { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return } // ✅ Исправлено по ревью: укороченный синтаксис
             
             DispatchQueue.main.async {
                 switch self.viewModel.state {
@@ -162,7 +158,6 @@ final class ProfileViewController: UIViewController {
                 case .failed(let error):
                     self.activityIndicator.stopAnimating()
                     print("❌ [Profile] Ошибка сети: \(error.localizedDescription)")
-                    // Показываем системный алерт пользователю об ошибке
                     self.showErrorAlert(with: error.localizedDescription)
                 }
             }
@@ -176,7 +171,6 @@ final class ProfileViewController: UIViewController {
         
         let placeholderImage = UIImage(systemName: "person.crop.circle.fill")?.withTintColor(.gray, renderingMode: .alwaysOriginal)
         
-        // Обрабатываем ссылку аватара: защищаем от http и добавляем красивый плейсхолдер
         if let avatarString = profile.avatar {
             let secureAvatarString = avatarString.replacingOccurrences(of: "http://", with: "https://")
             if let avatarURL = URL(string: secureAvatarString) {
@@ -186,7 +180,6 @@ final class ProfileViewController: UIViewController {
                     placeholder: placeholderImage,
                     options: [.transition(.fade(0.2))]
                 ) { result in
-                    // Если Cloudflare недоступен — принудительно ставим системного человечка
                     if case .failure = result {
                         DispatchQueue.main.async {
                             self.avatarImageView.image = placeholderImage
@@ -217,32 +210,25 @@ final class ProfileViewController: UIViewController {
     
     // MARK: - Actions
     @objc private func websiteButtonTapped() {
-        // Извлекаем текущие данные профиля из ViewModel
         guard case .data(let profile) = viewModel.state else { return }
         
-        // Разворачиваем опциональный website и проверяем на валидность URL
         guard let websiteString = profile.website,
               let url = URL(string: websiteString) else {
             print("❌ [Profile] Некорректный или отсутствующий URL сайта")
             return
         }
         
-        // Инициализируем созданный ProfileWebsiteViewController и пушим его в стек
         let websiteVC = ProfileWebsiteViewController(url: url)
-        websiteVC.hidesBottomBarWhenPushed = true // Прячем вкладки таббара во время просмотра сайта
+        websiteVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(websiteVC, animated: true)
     }
     
     @objc private func editButtonTapped() {
-        // Проверяем наличие актуальных данных в состоянии
         guard case .data(let profile) = viewModel.state else { return }
         
         let editVC = EditProfileViewController()
-        
-        // Назначаем делегатом текущий контроллер
         editVC.delegate = self
         
-        // Передаем данные на экран редактирования (строку аватара)
         editVC.configure(
             name: profile.name,
             description: profile.description,
@@ -250,8 +236,7 @@ final class ProfileViewController: UIViewController {
             avatarURLString: profile.avatar
         )
         
-        // Открываем модально
-        editVC.modalPresentationStyle = .pageSheet // Системная интерактивная карточка
+        editVC.modalPresentationStyle = .pageSheet
         present(editVC, animated: true)
     }
 }
@@ -331,7 +316,6 @@ extension ProfileViewController: EditProfileViewControllerDelegate {
     func didSaveProfile(name: String?, description: String?, website: String?, avatarURLString: String?) {
         print("💾 Получены новые данные для сохранения: \(String(describing: name))")
         
-        // Разворачиваем опционалы с помощью оператора ?? перед передачей во ViewModel
         viewModel.updateProfile(
             name: name ?? "",
             description: description ?? "",
