@@ -69,6 +69,16 @@ final class CartViewController: UIViewController {
         return button
     }()
     
+    private lazy var emptyLabel: UILabel = {
+        let label = UILabel()
+        label.font = .bodyBold
+        label.textColor = .textPrimary
+        label.text = NSLocalizedString("Empty label cart", comment: "")
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
+    
     private let viewModel: CartViewModel
     
     // MARK: - Initialisers
@@ -97,10 +107,26 @@ final class CartViewController: UIViewController {
         viewModel.updateTotal()
     }
     
+    // MARK: - Public methods
+    
+    func clearCart() {
+        viewModel.removeAllItems()
+    }
+    
+    func updateEmptyStateUI() {
+        [cartTableView, backgroundPayment, payButton, nftCount, nftTotalPrice].forEach { $0.isHidden = true }
+        navigationItem.rightBarButtonItem = nil
+        emptyLabel.isHidden = false
+    }
+    
     // MARK: - Private Methods
     
     @objc private func payButtonTapped() {
-        
+        let paymentViewModel = PaymentViewModel()
+            
+        let paymentVC = PaymentViewController(viewModel: paymentViewModel)
+        paymentVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(paymentVC, animated: true)
     }
     
     @objc private func filterButtonTapped() {
@@ -136,7 +162,9 @@ final class CartViewController: UIViewController {
     
     private func setupBindings() {
         viewModel.onItemsUpdated = { [weak self] in
-            self?.cartTableView.reloadData()
+            guard let self else { return }
+            self.cartTableView.reloadData()
+            self.emptyLabel.isHidden = !self.viewModel.items.isEmpty
         }
         viewModel.onTotalUpdated = { [weak self] count, total in
             self?.nftCount.text = count
@@ -152,10 +180,11 @@ final class CartViewController: UIViewController {
         backgroundPayment.addSubview(payButton)
         backgroundPayment.addSubview(nftCount)
         backgroundPayment.addSubview(nftTotalPrice)
+        view.addSubview(emptyLabel)
     }
     
     private func setupConstraints() {
-        [backgroundPayment, payButton, nftCount, nftTotalPrice].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [backgroundPayment, payButton, nftCount, nftTotalPrice, emptyLabel].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             backgroundPayment.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -172,8 +201,10 @@ final class CartViewController: UIViewController {
             payButton.topAnchor.constraint(equalTo: backgroundPayment.topAnchor, constant: 16),
             payButton.trailingAnchor.constraint(equalTo: backgroundPayment.trailingAnchor, constant: -16),
             payButton.widthAnchor.constraint(equalToConstant: 240),
-            payButton.heightAnchor.constraint(equalToConstant: 44)
+            payButton.heightAnchor.constraint(equalToConstant: 44),
             
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     

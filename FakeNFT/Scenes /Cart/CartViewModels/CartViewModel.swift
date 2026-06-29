@@ -55,6 +55,11 @@ final class CartViewModel {
         notifyUpdates()
     }
     
+    func removeAllItems() {
+        items.removeAll()
+        notifyUpdates()
+    }
+    
     // MARK: - Private Methods
     
     private func notifyUpdates() {
