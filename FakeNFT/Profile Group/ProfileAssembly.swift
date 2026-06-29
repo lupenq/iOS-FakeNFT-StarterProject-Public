@@ -1,23 +1,20 @@
-//
-//  ProfileAssembly.swift
-//  FakeNFT
-//
-//  Created by Данил Третьяченко on 28.06.2026.
-//
-
 import UIKit
 
 final class ProfileAssembly {
-    
-    func build() -> UIViewController {
+    static func assemble() -> UIViewController {
         let networkClient = DefaultNetworkClient()
         let profileService = ProfileService(networkClient: networkClient)
+        
         let viewModel = ProfileViewModel(profileService: profileService)
+        let viewController = ProfileViewController(viewModel: viewModel)
+        let navigationController = UINavigationController(rootViewController: viewController)
         
-        // Временная заглушка, пока не создадим ProfileViewController в подфиче 2
-        return UIViewController()
+        navigationController.tabBarItem = UITabBarItem(
+            title: "Профиль",
+            image: UIImage(systemName: "person.crop.circle"),
+            selectedImage: UIImage(systemName: "person.crop.circle.fill")
+        )
         
-        // let viewController = ProfileViewController(viewModel: viewModel)
-        // return viewController
+        return navigationController
     }
 }
