@@ -7,34 +7,22 @@
 
 import Foundation
 
-// MARK: - GET Request
 struct ProfileRequest: NetworkRequest {
     var endpoint: URL? {
-        return URL(string: "https://d5d-g913aba5alclgert.api.cloudfunctions.net/yandex-practicum/api/v1/profile/1")
+        return URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
     }
     
-    var httpMethod: HttpMethod {
-        return .get
-    }
-    
-    var dto: Dto? {
-        return nil
-    }
+    var httpMethod: HttpMethod { .get }
+    var dto: Dto? { nil }
 }
 
-// MARK: - PUT Request
 struct ProfileUpdateRequest: NetworkRequest {
     let updateDto: ProfileUpdateDto
     
     var endpoint: URL? {
-        return URL(string: "https://d5d-g913aba5alclgert.api.cloudfunctions.net/yandex-practicum/api/v1/profile/1")
+        return URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
     }
     
-    var httpMethod: HttpMethod {
-        return .put
-    }
-    
-    var dto: Dto? {
-        return updateDto
-    }
+    var httpMethod: HttpMethod { .put }
+    var dto: Dto? { updateDto }
 }
