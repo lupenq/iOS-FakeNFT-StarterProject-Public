@@ -40,7 +40,7 @@ final class SuccessfulPaymentVC: UIViewController {
     }()
     
     
-    // MARK: - View LifyCycle
+    // MARK: - View LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()

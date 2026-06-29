@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PaymentCell: UICollectionViewCell, ReuseIdentifying {
+final class PaymentCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Public Properties
     
     

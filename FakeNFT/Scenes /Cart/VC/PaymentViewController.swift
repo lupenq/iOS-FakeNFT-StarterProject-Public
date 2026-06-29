@@ -8,6 +8,10 @@
 import UIKit
 import ProgressHUD
 
+enum NavigationIcon: String {
+    case back = "chevron.left"
+}
+
 final class PaymentViewController: UIViewController {
     
     // MARK: - Public Properties
@@ -59,6 +63,7 @@ final class PaymentViewController: UIViewController {
     }()
     
     private let viewModel: PaymentViewModel
+    private let terms: String = "https://yandex.ru/legal/practicum_termsofuse"
     
     // MARK: - Initialisers
     
@@ -162,7 +167,7 @@ final class PaymentViewController: UIViewController {
         
         let range = (fullText as NSString).range(of: highlightText)
         if range.location != NSNotFound {
-            let url = URL(string: "https://yandex.ru/legal/practicum_termsofuse")!
+            let url = URL(string: terms)!
             attributedString.addAttribute(.link, value: url, range: range)
         }
         userTermsTextView.attributedText = attributedString
@@ -200,7 +205,7 @@ final class PaymentViewController: UIViewController {
     
     private func setupNavBar() {
         let backButton = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left"),
+            image: UIImage(systemName: NavigationIcon.back.rawValue),
             style: .plain,
             target: self,
             action: #selector(backButtonTapped)
