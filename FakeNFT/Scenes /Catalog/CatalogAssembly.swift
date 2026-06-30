@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 final class CatalogAssembly {
 
@@ -10,5 +10,12 @@ final class CatalogAssembly {
 
     func makeViewModel() -> CatalogViewModelProtocol {
         CatalogViewModel(service: servicesAssembly.collectionService)
+    }
+
+    func build() -> UIViewController {
+        CatalogViewController(
+            viewModel: makeViewModel(),
+            servicesAssembly: servicesAssembly
+        )
     }
 }
