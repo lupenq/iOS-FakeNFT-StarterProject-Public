@@ -59,6 +59,7 @@ final class CatalogViewController: UIViewController, LoadingView, ErrorView {
         view.backgroundColor = .systemBackground
         sortButton.tintColor = .closeButton
         navigationItem.rightBarButtonItem = sortButton
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         view.addSubview(tableView)
         tableView.constraintEdges(to: view)

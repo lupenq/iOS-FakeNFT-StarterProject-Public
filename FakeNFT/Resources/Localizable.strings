@@ -4,7 +4,9 @@
 "Catalog.sort.byName" = "По названию";
 "Catalog.sort.byNftCount" = "По количеству NFT";
 "Catalog.sort.close" = "Закрыть";
+"Collection.author" = "Автор коллекции:";
 "Error.network" = "Произошла ошибка сети";
 "Error.unknown" = "Произошла неизвестная ошибка";
 "Error.repeat" = "Повторить";
 "Error.title" = "Ошибка";
+"Error.ok" = "OK";
