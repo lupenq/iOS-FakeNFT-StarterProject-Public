@@ -1,10 +1,3 @@
-//
-//  ProfileWebsiteViewController.swift
-//  FakeNFT
-//
-//  Created by Данил Третьяченко on 29.06.2026.
-//
-
 import UIKit
 import WebKit
 
@@ -15,9 +8,10 @@ final class ProfileWebsiteViewController: UIViewController {
     
     // MARK: - UI Elements
     private lazy var webView: WKWebView = {
-        let webView = WKWebView()
+        let webConfiguration = WKWebViewConfiguration()
+        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.navigationDelegate = self
         webView.backgroundColor = .systemBackground
-        webView.isOpaque = false // Защита от белых вспышек при загрузке в темной теме
         webView.translatesAutoresizingMaskIntoConstraints = false
         return webView
     }()
@@ -25,7 +19,7 @@ final class ProfileWebsiteViewController: UIViewController {
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.color = UIColor.label
-        indicator.hidesWhenStopped = true // Автоматически прячется, когда не крутится
+        indicator.hidesWhenStopped = true
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
@@ -36,8 +30,9 @@ final class ProfileWebsiteViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        nil
     }
     
     // MARK: - Lifecycle
@@ -45,18 +40,16 @@ final class ProfileWebsiteViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        setupNavigationBar()
         
-        webView.navigationDelegate = self
-        
-        // Загружаем сайт
-        let request = URLRequest(url: url)
-        webView.load(request)
+        loadWebView()
     }
     
-    // MARK: - Setup UI
+    // MARK: - Private Methods
     private func setupViews() {
         view.backgroundColor = .systemBackground
+        
+       
+        navigationItem.largeTitleDisplayMode = .never
         
         view.addSubview(webView)
         view.addSubview(activityIndicator)
@@ -74,20 +67,15 @@ final class ProfileWebsiteViewController: UIViewController {
         ])
     }
     
-    private func setupNavigationBar() {
-        // Делаем кнопку назад просто стрелочкой без текста "Профиль"
-        let backButton = UIBarButtonItem()
-        backButton.title = ""
-        navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
-        navigationController?.navigationBar.tintColor = UIColor.label
+    private func loadWebView() {
+        activityIndicator.startAnimating()
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
 }
 
 // MARK: - WKNavigationDelegate
 extension ProfileWebsiteViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        activityIndicator.startAnimating()
-    }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         activityIndicator.stopAnimating()
@@ -95,9 +83,11 @@ extension ProfileWebsiteViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         activityIndicator.stopAnimating()
+        print("❌ [WebView] Ошибка загрузки страницы: \(error.localizedDescription)")
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         activityIndicator.stopAnimating()
+        print("❌ [WebView] Ошибка предварительной загрузки: \(error.localizedDescription)")
     }
 }

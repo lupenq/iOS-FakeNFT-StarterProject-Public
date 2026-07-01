@@ -15,8 +15,8 @@ final class MyNftsAssembly {
         let nftService = NftServiceImpl(networkClient: networkClient, storage: storage)
         
         let viewModel = MyNftsViewModel(nftIds: nftIds, nftService: nftService)
+        let viewController = MyNftsViewController(viewModel: viewModel)
         
-        // Заглушка, пока не создадим соответствующий ViewController
-        return UIViewController()
+        return viewController
     }
 }

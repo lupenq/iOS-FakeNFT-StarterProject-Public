@@ -12,13 +12,11 @@ final class FavouritesAssembly {
     static func build(likedIds: [String]) -> UIViewController {
         let networkClient = DefaultNetworkClient()
         let storage = NftStorageImpl()
-        
         let nftService = NftServiceImpl(networkClient: networkClient, storage: storage)
-        let profileService = ProfileService(networkClient: networkClient)
         
-        let viewModel = FavouritesViewModel(likedIds: likedIds, nftService: nftService, profileService: profileService)
+        let viewModel = FavouritesViewModel(likedIds: likedIds, nftService: nftService)
+        let viewController = FavouritesViewController(viewModel: viewModel)
         
-        // Заглушка, пока не создадим соответствующий ViewController
-        return UIViewController()
+        return viewController
     }
 }
