@@ -104,6 +104,7 @@ final class CartViewController: UIViewController {
         setupTableView()
         setupBindings()
         
+        viewModel.loadCart()
         viewModel.updateTotal()
     }
     
@@ -236,7 +237,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartCell = tableView.dequeueReusableCell()
         let item = viewModel.item(at: indexPath.row)
-        cell.configureCell(with: item)
+        cell.configure(with: item)
         cell.delegate = self
         return cell
     }
