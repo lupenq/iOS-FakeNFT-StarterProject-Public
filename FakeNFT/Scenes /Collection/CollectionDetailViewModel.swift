@@ -22,6 +22,9 @@ protocol CollectionDetailViewModelProtocol: AnyObject {
     var headerModel: CollectionHeaderModel? { get }
     var authorWebsite: URL? { get }
     var numberOfNfts: Int { get }
+    /// Доступность действий: false, если не удалось загрузить лайки/корзину — кнопки отключаются.
+    var canToggleLikes: Bool { get }
+    var canToggleCart: Bool { get }
 
     func viewDidLoad()
     func reload()
@@ -67,6 +70,9 @@ final class CollectionDetailViewModel: CollectionDetailViewModelProtocol {
     private var cartLoaded = false
 
     var numberOfNfts: Int { nfts.count }
+
+    var canToggleLikes: Bool { likesLoaded }
+    var canToggleCart: Bool { cartLoaded }
 
     var authorWebsite: URL? {
         author?.website ?? collection?.website

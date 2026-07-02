@@ -74,18 +74,31 @@ final class NftCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
     // MARK: - Configuration
 
-    func configure(with model: NftCellModel, isLiked: Bool, isInCart: Bool) {
+    func configure(
+        with model: NftCellModel,
+        isLiked: Bool,
+        isInCart: Bool,
+        likeEnabled: Bool,
+        cartEnabled: Bool
+    ) {
         nftImageView.kf.setImage(with: model.imageURL)
         nameLabel.text = model.name
         priceLabel.text = model.priceText
         ratingView.rating = model.rating
 
         likeButton.tintColor = isLiked ? .ypLikeActive : .ypLikeInactive
+        likeButton.isEnabled = likeEnabled
+        likeButton.alpha = likeEnabled ? 1 : 0.5
+        // accessibilityValue — детерминированный признак состояния для UI-тестов.
+        likeButton.accessibilityValue = isLiked ? "liked" : "notLiked"
 
         let cartImage = isInCart
             ? UIImage(named: "cartDelete")
             : UIImage(named: "cartAdd")
         cartButton.setImage(cartImage, for: .normal)
+        cartButton.isEnabled = cartEnabled
+        cartButton.alpha = cartEnabled ? 1 : 0.5
+        cartButton.accessibilityValue = isInCart ? "inCart" : "notInCart"
     }
 
     // MARK: - Actions

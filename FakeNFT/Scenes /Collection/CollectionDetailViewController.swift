@@ -215,7 +215,9 @@ extension CollectionDetailViewController: UICollectionViewDataSource {
         cell.configure(
             with: viewModel.cellModel(at: index),
             isLiked: viewModel.isLiked(at: index),
-            isInCart: viewModel.isInCart(at: index)
+            isInCart: viewModel.isInCart(at: index),
+            likeEnabled: viewModel.canToggleLikes,
+            cartEnabled: viewModel.canToggleCart
         )
         cell.onLikeTap = { [weak self] in self?.viewModel.toggleLike(at: index) }
         cell.onCartTap = { [weak self] in self?.viewModel.toggleCart(at: index) }

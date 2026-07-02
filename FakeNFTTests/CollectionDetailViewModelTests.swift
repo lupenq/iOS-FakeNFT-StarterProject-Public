@@ -120,6 +120,28 @@ final class CollectionDetailViewModelTests: XCTestCase {
 
     // MARK: - Action error
 
+    // MARK: - Action availability
+
+    func testActionsEnabledWhenLikesAndCartLoaded() {
+        let viewModel = makeViewModel(nfts: [makeNft(id: "a")])
+        loadToData(viewModel)
+
+        XCTAssertTrue(viewModel.canToggleLikes)
+        XCTAssertTrue(viewModel.canToggleCart)
+    }
+
+    func testActionsDisabledWhenLikesAndCartFailedToLoad() {
+        let order = StubOrderService()
+        order.failLoad = true
+        let profile = StubProfileService()
+        profile.failLoad = true
+        let viewModel = makeViewModel(nfts: [makeNft(id: "a")], order: order, profile: profile)
+        loadToData(viewModel)
+
+        XCTAssertFalse(viewModel.canToggleLikes, "Кнопка лайка должна быть отключена при сбое загрузки профиля")
+        XCTAssertFalse(viewModel.canToggleCart, "Кнопка корзины должна быть отключена при сбое загрузки заказа")
+    }
+
     // MARK: - Guard against overwriting unknown state
 
     func testToggleCartBlockedAndReportsErrorWhenCartFailedToLoad() {
