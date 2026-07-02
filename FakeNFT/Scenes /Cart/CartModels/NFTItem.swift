@@ -7,6 +7,7 @@
 
 import UIKit
 
+///mock
 struct NFTItem {
     let id: UUID = UUID()
     let image: UIImage?
