@@ -10,13 +10,10 @@ import Foundation
 final class FavouritesViewModel {
     
     // MARK: - Properties
-    private let nftService: NftService
-    private let profileService: ProfileServiceProtocol
     private var likedIds: [String]
+    private let nftService: NftServiceImpl
     
-    var onChange: (() -> Void)?
-    
-    private(set) var favoriteNfts: [Nft] = [] {
+    private(set) var favouritesNfts: [Nft] = [] {
         didSet {
             onChange?()
         }
@@ -24,66 +21,62 @@ final class FavouritesViewModel {
     
     private(set) var isLoading: Bool = false {
         didSet {
-            onChange?()
+            onLoadingStateChange?()
         }
     }
     
-    private(set) var error: Error? {
-        didSet {
-            onChange?()
-        }
-    }
+    // MARK: - Closures for Binding
+    var onChange: (() -> Void)?
+    var onLoadingStateChange: (() -> Void)?
     
     // MARK: - Initialization
-    init(likedIds: [String], nftService: NftService, profileService: ProfileServiceProtocol = ProfileService()) {
-            self.likedIds = likedIds
-            self.nftService = nftService
-            self.profileService = profileService
-        }
+    init(likedIds: [String], nftService: NftServiceImpl) {
+        self.likedIds = likedIds
+        self.nftService = nftService
+    }
     
     // MARK: - Public Methods
-    func loadFavorites() {
+    func loadFavourites() {
         guard !likedIds.isEmpty else {
-            self.favoriteNfts = []
+            self.favouritesNfts = []
             return
         }
         
         isLoading = true
-        let group = DispatchGroup()
+        let dispatchGroup = DispatchGroup()
         var loadedNfts: [Nft] = []
-        var fetchError: Error?
         
         for id in likedIds {
-            group.enter()
+            dispatchGroup.enter()
             nftService.loadNft(id: id) { result in
+                defer { dispatchGroup.leave() }
                 switch result {
                 case .success(let nft):
                     loadedNfts.append(nft)
                 case .failure(let error):
-                    fetchError = error
+                    print("❌ Ошибка загрузки избранного NFT \(id): \(error.localizedDescription)")
                 }
-                group.leave()
             }
         }
         
-        group.notify(queue: .main) { [weak self] in
-            guard let self = self else { return }
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            guard let self else { return }
             self.isLoading = false
-            if let error = fetchError {
-                self.error = error
-            } else {
-                self.favoriteNfts = loadedNfts
+            
+            self.favouritesNfts = self.likedIds.compactMap { id in
+                loadedNfts.first(where: { $0.id == id })
             }
         }
     }
     
-    /// Метод для удаления из избранного прямо на экране коллекции
-    func removeFormFavorites(nftId: String) {
-        // Убираем ID из локального списка
-        likedIds.removeAll { $0 == nftId }
-        favoriteNfts.removeAll { $0.id == nftId }
+    func removeNftFromFavourites(at index: Int) {
+        guard index < favouritesNfts.count else { return }
+        let removedNft = favouritesNfts[index]
         
-        // Отправляем обновление на сервер, чтобы сохранить изменения
-        // Для этого нужно будет перезаписать массив likes в профиле (сделаем в UI слое)
+        
+        likedIds.removeAll { $0 == removedNft.id }
+        favouritesNfts.remove(at: index)
+        
+        print("💾 NFT \(removedNft.id) удален из лайков. Отправьте запрос обновления профиля.")
     }
 }

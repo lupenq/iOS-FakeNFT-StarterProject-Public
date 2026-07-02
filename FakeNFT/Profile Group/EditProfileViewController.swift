@@ -52,7 +52,7 @@ final class EditProfileViewController: UIViewController {
     private lazy var descriptionLabel: UILabel = createFieldLabel(text: "Описание")
     private lazy var descriptionTextView: UITextView = {
         let textView = UITextView()
-        textView.font = .bodyRegular // ✅ Исправлено по ревью: Дизайн-система шрифтов
+        textView.font = .bodyRegular
         textView.layer.cornerRadius = 12
         textView.backgroundColor = .systemGray6
         textView.textContainerInset = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 16)
@@ -68,7 +68,7 @@ final class EditProfileViewController: UIViewController {
         button.setTitle("Сохранить", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.label
-        button.titleLabel?.font = .bodyBold // ✅ Исправлено по ревью: Дизайн-система шрифтов
+        button.titleLabel?.font = .bodyBold
         button.layer.cornerRadius = 16
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
@@ -188,14 +188,14 @@ final class EditProfileViewController: UIViewController {
         )
         
         alertController.addTextField { [weak self] textField in
-            guard let self else { return } // ✅ Исправлено по ревью: укороченный синтаксис Swift 5.7+
+            guard let self else { return } 
             textField.placeholder = "https://example.com/avatar.png"
             textField.text = self.currentAvatarURLString
             textField.keyboardType = .URL
         }
         
         let confirmAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-            guard let self else { return } // ✅ Исправлено по ревью: укороченный синтаксис Swift 5.7+
+            guard let self else { return }
             guard let textField = alertController.textFields?.first,
                   let text = textField.text, !text.isEmpty else { return }
             

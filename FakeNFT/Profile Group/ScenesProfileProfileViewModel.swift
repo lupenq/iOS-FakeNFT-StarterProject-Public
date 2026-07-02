@@ -1,6 +1,5 @@
 import Foundation
 
-// Состояния экрана для обработки во View
 enum ProfileState {
     case initial
     case loading
@@ -13,10 +12,8 @@ final class ProfileViewModel {
     // MARK: - Properties
     private let profileService: ProfileServiceProtocol
     
-    // Замыкание, на которое подпишется ViewController для обновления интерфейса
     var onChange: (() -> Void)?
     
-    // Текущее состояние экрана. При его изменении автоматически триггерится замыкание
     private(set) var state: ProfileState = .initial {
         didSet {
             onChange?()
@@ -30,7 +27,6 @@ final class ProfileViewModel {
     
     // MARK: - Public Methods
     
-    /// Загрузка данных профиля (GET)
     func loadProfile() {
         state = .loading
         profileService.loadProfile { [weak self] result in
@@ -44,9 +40,9 @@ final class ProfileViewModel {
         }
     }
     
-    /// Обновление данных профиля (PUT)
+   
     func updateProfile(name: String, description: String?, website: String?, avatar: String?) {
-        // Запрос на обновление можно отправить только если данные уже были один раз успешно загружены
+       
         guard case .data(let currentProfile) = state else { return }
         
         let dto = ProfileUpdateDto(
@@ -61,7 +57,7 @@ final class ProfileViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let updatedProfile):
-                // Сервер возвращает обновленный профиль, прокидываем его в состояние .data
+               
                 self.state = .data(updatedProfile)
             case .failure(let error):
                 self.state = .failed(error)

@@ -20,7 +20,7 @@ final class ProfileViewController: UIViewController {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .headline3 // ✅ Исправлено по ревью: Дизайн-система шрифтов
+        label.font = .headline3 
         label.textColor = UIColor.label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -71,7 +71,7 @@ final class ProfileViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    // ✅ Исправлено по ревью: убран fatalError, исключен аварийный выход
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         nil
@@ -91,7 +91,7 @@ final class ProfileViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .systemBackground
         
-        // ✅ Исправлено по ревью: удален очевидный комментарий
+        
         let editButton = UIBarButtonItem(
             image: UIImage(systemName: "square.and.pencil"),
             style: .plain,
@@ -110,7 +110,7 @@ final class ProfileViewController: UIViewController {
     }
     
     private func setupConstraints() {
-        // ✅ Исправлено по ревью: удалены все избыточные комментарии к констрейнтам
+        
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -142,7 +142,7 @@ final class ProfileViewController: UIViewController {
     // MARK: - Binding
     private func bindViewModel() {
         viewModel.onChange = { [weak self] in
-            guard let self else { return } // ✅ Исправлено по ревью: укороченный синтаксис
+            guard let self else { return }
             
             DispatchQueue.main.async {
                 switch self.viewModel.state {
@@ -289,14 +289,14 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.row {
         case 0:
-            let myNftsVC = MyNftsViewController()
-            myNftsVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(myNftsVC, animated: true)
+            let myNftsVC = MyNftsAssembly.build(nftIds: profile.nfts)
+                myNftsVC.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(myNftsVC, animated: true)
             
         case 1:
-            let favouritesVC = FavouritesViewController()
-            favouritesVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(favouritesVC, animated: true)
+            let favouritesVC = FavouritesAssembly.build(likedIds: profile.likes)
+                favouritesVC.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(favouritesVC, animated: true)
             
         case 2:
             guard let websiteString = profile.website,
