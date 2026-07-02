@@ -163,7 +163,7 @@ extension FavouritesViewController: UICollectionViewDelegateFlowLayout {
         let availableWidth = collectionView.bounds.width - 32 - 7
         let cellWidth = availableWidth / 2
         
-        
-        return CGSize(width: cellWidth, height: cellWidth + 80)
+       
+        return CGSize(width: cellWidth, height: 80)
     }
 }

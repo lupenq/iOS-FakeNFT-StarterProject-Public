@@ -1,10 +1,3 @@
-//
-//  FavouritesNftCell.swift
-//  FakeNFT
-//
-//  Created by Данил Третьяченко on 01.07.2026.
-//
-
 import UIKit
 import Kingfisher
 
@@ -22,7 +15,6 @@ final class FavouritesNftCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 12
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = .placeholderText
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -47,7 +39,7 @@ final class FavouritesNftCell: UICollectionViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .bodyBold
+        label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = UIColor.label
         return label
     }()
@@ -61,7 +53,7 @@ final class FavouritesNftCell: UICollectionViewCell {
     
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
-        label.font = .caption1
+        label.font = .systemFont(ofSize: 15, weight: .regular)
         label.textColor = UIColor.label
         return label
     }()
@@ -117,21 +109,21 @@ final class FavouritesNftCell: UICollectionViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-           
+            // Картинка слева фиксированного размера 72x72 по Фигме
             nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            nftImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            nftImageView.heightAnchor.constraint(equalTo: nftImageView.widthAnchor),
+            nftImageView.widthAnchor.constraint(equalToConstant: 72),
+            nftImageView.heightAnchor.constraint(equalToConstant: 72),
             
-           
-            likeButton.topAnchor.constraint(equalTo: nftImageView.topAnchor, constant: 6),
-            likeButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: -6),
-            likeButton.widthAnchor.constraint(equalToConstant: 30),
-            likeButton.heightAnchor.constraint(equalToConstant: 30),
+            // Лайк на правом верхнем углу картинки
+            likeButton.topAnchor.constraint(equalTo: nftImageView.topAnchor, constant: -2),
+            likeButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 2),
+            likeButton.widthAnchor.constraint(equalToConstant: 26),
+            likeButton.heightAnchor.constraint(equalToConstant: 26),
             
-           
-            infoStackView.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 8),
-            infoStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            // Инфо-стек С ПРАВА от картинки
+            infoStackView.centerYAnchor.constraint(equalTo: nftImageView.centerYAnchor),
+            infoStackView.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 12),
             infoStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             infoStackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor)
         ])

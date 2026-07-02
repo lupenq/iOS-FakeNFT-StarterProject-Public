@@ -17,6 +17,15 @@ final class MyNftCell: UITableViewCell {
         return imageView
     }()
     
+    // Кнопка-лайк, добавленная по макету Фигмы
+    private lazy var likeButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        button.tintColor = .white // На экране "Мои NFT" по дефолту белые/светлые
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private lazy var infoStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -28,7 +37,7 @@ final class MyNftCell: UITableViewCell {
     
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .bodyBold
+        label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = UIColor.label
         return label
     }()
@@ -37,13 +46,12 @@ final class MyNftCell: UITableViewCell {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.spacing = 2
-        stack.distribution = .fillEqually
         return stack
     }()
     
     private lazy var authorLabel: UILabel = {
         let label = UILabel()
-        label.font = .caption2
+        label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = UIColor.label
         return label
     }()
@@ -60,14 +68,14 @@ final class MyNftCell: UITableViewCell {
     private lazy var priceTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Цена"
-        label.font = .caption1
-        label.textColor = UIColor.secondaryLabel
+        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.textColor = UIColor.label
         return label
     }()
     
     private lazy var priceValueLabel: UILabel = {
         let label = UILabel()
-        label.font = .bodyBold
+        label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = UIColor.label
         return label
     }()
@@ -92,14 +100,18 @@ final class MyNftCell: UITableViewCell {
         nameLabel.text = nil
         authorLabel.text = nil
         priceValueLabel.text = nil
+        likeButton.tintColor = .white
         ratingStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
     
     // MARK: - Configuration
-    func configure(with nft: Nft) {
+    func configure(with nft: Nft, isLiked: Bool = true) {
         nameLabel.text = nft.name
         authorLabel.text = "от \(nft.author)"
         priceValueLabel.text = "\(nft.price) ETH"
+        
+        // Меняем цвет сердечка в зависимости от того, в лайках ли ассет
+        likeButton.tintColor = isLiked ? .systemRed : .white
         
         setupRating(nft.rating)
         
@@ -118,6 +130,7 @@ final class MyNftCell: UITableViewCell {
         backgroundColor = .clear
         
         contentView.addSubview(nftImageView)
+        contentView.addSubview(likeButton)
         contentView.addSubview(infoStackView)
         contentView.addSubview(priceStackView)
         
@@ -131,16 +144,25 @@ final class MyNftCell: UITableViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            // Картинка токена (фиксированный размер и аккуратный отступ 16)
             nftImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             nftImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             nftImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             nftImageView.widthAnchor.constraint(equalToConstant: 108),
             nftImageView.heightAnchor.constraint(equalToConstant: 108),
             
+            // Сердечко поверх картинки в верхнем правом углу
+            likeButton.topAnchor.constraint(equalTo: nftImageView.topAnchor, constant: 0),
+            likeButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 0),
+            likeButton.widthAnchor.constraint(equalToConstant: 30),
+            likeButton.heightAnchor.constraint(equalToConstant: 30),
+            
+            // Центральный блок информации
             infoStackView.centerYAnchor.constraint(equalTo: nftImageView.centerYAnchor),
             infoStackView.leadingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: 20),
             infoStackView.trailingAnchor.constraint(lessThanOrEqualTo: priceStackView.leadingAnchor, constant: -8),
             
+            // Блок цены справа
             priceStackView.centerYAnchor.constraint(equalTo: nftImageView.centerYAnchor),
             priceStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             priceStackView.widthAnchor.constraint(equalToConstant: 90)
