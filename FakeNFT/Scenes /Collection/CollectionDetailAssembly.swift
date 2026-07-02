@@ -11,11 +11,17 @@ final class CollectionDetailAssembly {
     func makeViewModel(with input: CollectionDetailInput) -> CollectionDetailViewModelProtocol {
         CollectionDetailViewModel(
             collectionId: input.collectionId,
-            service: servicesAssembly.collectionService
+            collectionService: servicesAssembly.collectionService,
+            orderService: servicesAssembly.orderService,
+            profileService: servicesAssembly.profileService,
+            userService: servicesAssembly.userService
         )
     }
 
     func build(with input: CollectionDetailInput) -> UIViewController {
-        CollectionDetailViewController(viewModel: makeViewModel(with: input))
+        CollectionDetailViewController(
+            viewModel: makeViewModel(with: input),
+            servicesAssembly: servicesAssembly
+        )
     }
 }

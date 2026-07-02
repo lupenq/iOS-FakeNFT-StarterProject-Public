@@ -16,4 +16,17 @@ extension NftCellModel {
         self.rating = nft.rating
         self.price = nft.price
     }
+
+    var priceText: String {
+        let formatted = NftCellModel.priceFormatter.string(from: NSNumber(value: price)) ?? "\(price)"
+        return "\(formatted) ETH"
+    }
+
+    private static let priceFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
 }

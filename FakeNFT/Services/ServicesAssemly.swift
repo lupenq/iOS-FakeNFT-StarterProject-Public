@@ -24,4 +24,16 @@ final class ServicesAssembly {
             nftService: nftService
         )
     }
+
+    var orderService: OrderService {
+        OrderServiceImpl(networkClient: networkClient)
+    }
+
+    var profileService: ProfileService {
+        ProfileServiceImpl(networkClient: networkClient)
+    }
+
+    var userService: UserService {
+        UserServiceImpl(networkClient: networkClient)
+    }
 }
