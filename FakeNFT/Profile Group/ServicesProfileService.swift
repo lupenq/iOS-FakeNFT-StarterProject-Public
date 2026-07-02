@@ -5,7 +5,7 @@ protocol ProfileServiceProtocol {
     func updateProfile(with dto: ProfileUpdateDto, completion: @escaping (Result<Profile, Error>) -> Void)
 }
 
-final class ProfileService: ProfileServiceProtocol {
+final class ProfileDetailsService: ProfileServiceProtocol {
     
     private let networkClient: NetworkClient
     

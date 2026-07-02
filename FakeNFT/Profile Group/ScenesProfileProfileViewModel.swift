@@ -21,7 +21,7 @@ final class ProfileViewModel {
     }
     
     // MARK: - Initialization
-    init(profileService: ProfileServiceProtocol = ProfileService()) {
+    init(profileService: ProfileServiceProtocol = ProfileDetailsService()) {
         self.profileService = profileService
     }
     

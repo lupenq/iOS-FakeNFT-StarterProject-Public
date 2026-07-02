@@ -3,7 +3,7 @@ import UIKit
 final class ProfileAssembly {
     static func assemble() -> UIViewController {
         let networkClient = DefaultNetworkClient()
-        let profileService = ProfileService(networkClient: networkClient)
+        let profileService = ProfileDetailsService(networkClient: networkClient)
         
         let viewModel = ProfileViewModel(profileService: profileService)
         let viewController = ProfileViewController(viewModel: viewModel)

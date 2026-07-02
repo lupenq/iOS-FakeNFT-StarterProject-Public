@@ -6,24 +6,22 @@ final class TabBarController: UITabBarController {
 
     private let catalogTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.catalog", comment: ""),
-        image: UIImage(systemName: "square.stack.3d.up.fill"),
+        image: UIImage(named: "tabCatalog"),
         tag: 0
     )
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // 1. Настройка первой вкладки (Каталог)
-        let catalogController = TestCatalogViewController(
+        let catalogController = CatalogAssembly(
             servicesAssembly: servicesAssembly
-        )
-        catalogController.tabBarItem = catalogTabBarItem
+        ).build()
+        let catalogNavigationController = UINavigationController(rootViewController: catalogController)
+        catalogNavigationController.tabBarItem = catalogTabBarItem
 
-        // 2. Настройка новой вкладки (Профиль) через наш Assembly
         let profileController = ProfileAssembly.assemble()
 
-        // 3. Добавляем оба контроллера в нижнее меню
-        viewControllers = [catalogController, profileController]
+        viewControllers = [catalogNavigationController, profileController]
 
         view.backgroundColor = .systemBackground
     }
