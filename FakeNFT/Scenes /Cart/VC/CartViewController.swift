@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class CartViewController: UIViewController {
     
@@ -104,6 +105,7 @@ final class CartViewController: UIViewController {
         setupTableView()
         setupBindings()
         
+        ProgressHUD.show()
         viewModel.loadCart()
         viewModel.updateTotal()
     }
@@ -166,7 +168,14 @@ final class CartViewController: UIViewController {
             guard let self else { return }
             self.cartTableView.reloadData()
             self.emptyLabel.isHidden = !self.viewModel.items.isEmpty
+            ProgressHUD.dismiss()
         }
+        
+        viewModel.onLoadError = { error in
+            ProgressHUD.dismiss()
+            ProgressHUD.showError(error.localizedDescription)
+        }
+        
         viewModel.onTotalUpdated = { [weak self] count, total in
             self?.nftCount.text = count
             self?.nftTotalPrice.text = total
