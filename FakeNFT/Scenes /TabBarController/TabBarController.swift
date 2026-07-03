@@ -25,12 +25,10 @@ final class TabBarController: UITabBarController {
         
         let cartService = CartServiceImpl(networkClient: DefaultNetworkClient())
         let nftService = NFTServiceImpl()
-        let viewModel = CartViewModel(nftService: nftService, cartService: cartService)
+        let cartViewModel = CartViewModel(nftService: nftService, cartService: cartService)
+        let paymentService = PaymentServiceImpl(client: DefaultNetworkClient(), baseURL: RequestConstants.baseURL)
         
-        let cartController = CartViewController(
-            servicesAssembly: servicesAssembly,
-            viewModel: viewModel
-        )
+        let cartController = CartViewController(viewModel: cartViewModel, paymentService: paymentService)
         
         catalogController.tabBarItem = catalogTabBarItem
         cartController.tabBarItem = cartTabBarItem

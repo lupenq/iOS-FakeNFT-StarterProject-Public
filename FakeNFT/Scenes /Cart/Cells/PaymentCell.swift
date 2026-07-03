@@ -66,11 +66,23 @@ final class PaymentCell: UICollectionViewCell, ReuseIdentifying {
     
     // MARK: - Public Methods
     
-    func configureCell(with item: Currency) {
-        currencyImageView.image = item.image
+    func configure(with item: PaymentMethod) {
+        if let url = URL(string: item.image) {
+            URLSession.shared.dataTask(with: url) { data, _, _ in
+                if let data, let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.currencyImageView.image = image
+                    }
+                }
+            }.resume()
+        } else {
+            currencyImageView.image = nil
+        }
+        
         currencyTitleLabel.text = item.title
-        currencyAcronymTitleLabel.text = item.shortTitle
+        currencyAcronymTitleLabel.text = item.name
     }
+    
     
     // MARK: - Private Methods
     

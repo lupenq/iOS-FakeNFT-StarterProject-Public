@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Currency {
+struct CurrencyMockData {
     let image: UIImage?
     let title: String
     let shortTitle: String

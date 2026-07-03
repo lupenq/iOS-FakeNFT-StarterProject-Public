@@ -10,11 +10,6 @@ import ProgressHUD
 
 final class CartViewController: UIViewController {
     
-    // MARK: - Public Properties
-    
-    let servicesAssembly: ServicesAssembly
-    
-    
     // MARK: - Private Properties
     
     private lazy var cartTableView: UITableView = {
@@ -81,12 +76,13 @@ final class CartViewController: UIViewController {
     }()
     
     private let viewModel: CartViewModel
+    private let paymentService: PaymentService
     
     // MARK: - Initialisers
     
-    init(servicesAssembly: ServicesAssembly, viewModel: CartViewModel) {
-        self.servicesAssembly = servicesAssembly
+    init(viewModel: CartViewModel, paymentService: PaymentService) {
         self.viewModel = viewModel
+        self.paymentService = paymentService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -125,9 +121,8 @@ final class CartViewController: UIViewController {
     // MARK: - Private Methods
     
     @objc private func payButtonTapped() {
-        let paymentViewModel = PaymentViewModel()
             
-        let paymentVC = PaymentViewController(viewModel: paymentViewModel)
+        let paymentVC = PaymentViewController(paymentService: paymentService, nftIds: viewModel.items.map { $0.id })
         paymentVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(paymentVC, animated: true)
     }

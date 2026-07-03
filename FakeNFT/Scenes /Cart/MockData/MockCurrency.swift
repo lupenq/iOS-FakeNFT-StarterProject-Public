@@ -8,7 +8,7 @@
 import UIKit
 
 enum MockCurrency {
-    static let items: [Currency] = [
+    static let items: [CurrencyMockData] = [
         .init(image: UIImage(resource: .bitcoinBTC), title: "Bitcoin", shortTitle: "BTC"),
         .init(image: UIImage(resource: .dogecoinDOGE), title: "Dogecoin", shortTitle: "DOGE"),
         .init(image: UIImage(resource: .tetherUSDT), title: "Tether", shortTitle: "USDT"),
