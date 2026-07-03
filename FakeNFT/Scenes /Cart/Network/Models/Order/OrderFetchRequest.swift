@@ -9,7 +9,6 @@ import Foundation
 
 struct OrderFetchRequest: NetworkRequest {
     let endpoint: URL?
-    //let httpMethod: HttpMethod = .get
     let dto: Dto? = nil
         
     init(orderId: String) { 
