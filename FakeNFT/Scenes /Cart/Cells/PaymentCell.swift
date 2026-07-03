@@ -15,6 +15,7 @@ final class PaymentCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Private Properties
     
     private lazy var currencyImageView: UIImageView = {
+        let view = UIImageView()
         view.contentMode = .scaleAspectFill
         return view
     }()

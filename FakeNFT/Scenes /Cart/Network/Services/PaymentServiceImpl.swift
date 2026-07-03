@@ -61,7 +61,7 @@ final class PaymentServiceImpl: PaymentService {
     }
     
     func pay(orderId: String, currencyId: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let request = PayRequest(currencyId: currencyId, orderId: orderId)
+        let request = PayRequest(currencyId: currencyId)
         print("Paying order \(orderId) with currencyId \(currencyId)")
         
         client.send(request: request, completionQueue: .main) { result in

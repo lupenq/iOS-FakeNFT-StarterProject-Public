@@ -39,12 +39,11 @@ struct PaymentMethod {
 }
 
 struct GetOrdersRequest: NetworkRequest {
-    let orderId: String
     var httpMethod: HttpMethod { .get }
     var dto: Dto? { EmptyDto() }
     
     var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/orders/\(orderId)")
+        URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1")
     }
 }
 
@@ -84,24 +83,41 @@ struct PayRequest: NetworkRequest {
     var dto: Dto? { EmptyDto() }
     
     let currencyId: String
-    let orderId: String
     
     var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/orders/\(orderId)/payment/\(currencyId)")
+        URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1/payment/\(currencyId)")
     }
     
     var nfts: [String]?
 }
 
 struct ChangeOrderRequest: NetworkRequest {
-    let orderId: String
-    let nfts: [String]
-    
     var httpMethod: HttpMethod { .put }
-    var dto: Dto? { ChangeOrderDto(nfts: nfts) }
+    var dto: Dto? { ChangeOrderDto(nfts: nfts ?? []) }
+    
+    var nfts: [String]?
     
     var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/orders/\(orderId)")
+        URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1")
+    }
+    
+    init(nfts: [String]) {
+        self.nfts = nfts
+    }
+}
+
+struct EmptyOrderRequest: NetworkRequest {
+    var httpMethod: HttpMethod { .put }
+    var dto: Dto? { ChangeOrderDto(nfts: nfts ?? []) }
+    
+    var nfts: [String]?
+    
+    var endpoint: URL? {
+        URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1")
+    }
+    
+    init(nfts: [String]) {
+        self.nfts = nfts
     }
 }
 
