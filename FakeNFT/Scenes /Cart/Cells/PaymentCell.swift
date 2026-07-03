@@ -15,7 +15,6 @@ final class PaymentCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Private Properties
     
     private lazy var currencyImageView: UIImageView = {
-        let view = UIImageView(frame: CGRect(x: 0, y: 0, width: 36, height: 36))
         view.contentMode = .scaleAspectFill
         return view
     }()
@@ -107,6 +106,8 @@ final class PaymentCell: UICollectionViewCell, ReuseIdentifying {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            currencyImageView.widthAnchor.constraint(equalToConstant: 36),
+            currencyImageView.heightAnchor.constraint(equalToConstant: 36),
             currencyImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
             currencyImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
             currencyImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
