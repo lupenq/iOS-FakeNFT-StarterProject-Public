@@ -274,13 +274,15 @@ extension CartViewController: CartCellDelegate {
         let item = viewModel.item(at: indexPath.row)
         
         let deleteModalVC = DeleteModalViewController(
-            image: item.image,
+            imageURL: item.imageUrl,
+            title: item.title,
             onDelete: { [weak self] in
                 guard let self else { return }
                 self.viewModel.removeItem(at: indexPath.row)
                 self.cartTableView.reloadData()
             }
         )
+        
         deleteModalVC.modalPresentationStyle = .overFullScreen
         deleteModalVC.modalTransitionStyle = .crossDissolve
         present(deleteModalVC, animated: true)

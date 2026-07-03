@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class DeleteModalViewController: UIViewController {
     // MARK: - Private Properties
@@ -20,7 +21,7 @@ final class DeleteModalViewController: UIViewController {
         let label = UILabel()
         label.font = .caption2
         label.textColor = .textPrimary
-        label.text = NSLocalizedString("DeleteModalVC.title", comment: "")
+        //label.text = NSLocalizedString("DeleteModalVC.title", comment: "")
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -61,6 +62,7 @@ final class DeleteModalViewController: UIViewController {
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
     
     private let onDelete: () -> Void
+    private let nftImageURL: URL?
     
     // MARK: - Initialisers
     
@@ -69,8 +71,22 @@ final class DeleteModalViewController: UIViewController {
         onDelete: @escaping () -> Void
     ) {
         self.onDelete = onDelete
+        self.nftImageURL = nil
         super.init(nibName: nil, bundle: nil)
         self.nftImage.image = image
+        modalPresentationStyle = .overFullScreen
+        modalTransitionStyle = .crossDissolve
+    }
+    
+    init(imageURL: URL?, title: String, onDelete: @escaping () -> Void) {
+        
+        self.nftImageURL = imageURL
+        self.onDelete = onDelete
+        super.init(nibName: nil, bundle: nil)
+        self.nftTitle.text = String.localizedStringWithFormat(
+            NSLocalizedString("DeleteModalVC.title", comment: ""),
+            title
+        )
         modalPresentationStyle = .overFullScreen
         modalTransitionStyle = .crossDissolve
     }
@@ -88,6 +104,7 @@ final class DeleteModalViewController: UIViewController {
         setupBlur()
         setupUI()
         setupConstraints()
+        loadImage()
     }
     
     // MARK: - Private Methods
@@ -101,6 +118,11 @@ final class DeleteModalViewController: UIViewController {
     
     @objc private func backButtonTapped() {
         dismiss(animated: true)
+    }
+    
+    private func loadImage() {
+        guard let url = nftImageURL else { return }
+        nftImage.kf.setImage(with: url, placeholder: UIImage(resource: .nftCart))
     }
     
     // MARK: - Private Methods UI
