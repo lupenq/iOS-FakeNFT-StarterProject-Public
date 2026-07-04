@@ -16,6 +16,7 @@ protocol PaymentService {
 final class PaymentServiceImpl: PaymentService {
     private let client: NetworkClient
     private let baseURL: String
+    private let decoder = JSONDecoder()
     
     init(client: NetworkClient, baseURL: String) {
         self.client = client
@@ -30,7 +31,7 @@ final class PaymentServiceImpl: PaymentService {
             switch result {
             case .success(let data):
                 do {
-                    let currencies = try JSONDecoder().decode([Currency].self, from: data)
+                    let currencies = try self.decoder.decode([Currency].self, from: data)
                     completion(.success(currencies))
                 } catch {
                     completion(.failure(error))
@@ -49,7 +50,7 @@ final class PaymentServiceImpl: PaymentService {
             switch result {
             case .success(let data):
                 do {
-                    let response = try JSONDecoder().decode(CreateOrderResponse.self, from: data)
+                    let response = try self.decoder.decode(CreateOrderResponse.self, from: data)
                     completion(.success(response))
                 } catch {
                     completion(.failure(error))
@@ -68,7 +69,7 @@ final class PaymentServiceImpl: PaymentService {
             switch result {
             case .success(let data):
                 do {
-                    let payResponse = try JSONDecoder().decode(PayResponse.self, from: data)
+                    let payResponse = try self.decoder.decode(PayResponse.self, from: data)
                     if payResponse.success {
                         completion(.success(()))
                     } else {

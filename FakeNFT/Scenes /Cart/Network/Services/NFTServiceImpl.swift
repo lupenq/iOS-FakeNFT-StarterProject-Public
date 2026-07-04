@@ -13,6 +13,8 @@ protocol NFTService {
 
 final class NFTServiceImpl: NFTService {
     
+    private let decoder = JSONDecoder()
+    
     func fetchNFTs(with ids: [String], completion: @escaping (Result<[NFT], any Error>) -> Void) {
         guard !ids.isEmpty else {
             completion(.success([]))
@@ -28,7 +30,6 @@ final class NFTServiceImpl: NFTService {
         
         var request = URLRequest(url: url)
         request.httpMethod = HttpMethod.get.rawValue
-        
         request.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         
         print("FETCH NFTS")
@@ -36,7 +37,7 @@ final class NFTServiceImpl: NFTService {
         print("Method: \(request.httpMethod ?? "nil")")
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if let error {
                 print("NETWORK ERROR: \(error)")
                 DispatchQueue.main.async { completion(.failure(error)) }
                 return
@@ -46,7 +47,7 @@ final class NFTServiceImpl: NFTService {
                 print("HTTP STATUS: \(httpResponse.statusCode)")
             }
             
-            guard let data = data else {
+            guard let data else {
                 let err = NSError(domain: "NFTService", code: 0, userInfo: [NSLocalizedDescriptionKey: "No data"])
                 print("ERROR: No data")
                 DispatchQueue.main.async { completion(.failure(err)) }
@@ -58,7 +59,7 @@ final class NFTServiceImpl: NFTService {
             }
             
             do {
-                let nfts = try JSONDecoder().decode([NFT].self, from: data)
+                let nfts = try self.decoder.decode([NFT].self, from: data)
                 print("JSON decoded: \(nfts.count) NFT(s)")
                 DispatchQueue.main.async { completion(.success(nfts)) }
             } catch {
