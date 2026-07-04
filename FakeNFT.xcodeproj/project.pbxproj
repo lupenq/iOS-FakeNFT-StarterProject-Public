@@ -51,6 +51,7 @@
 		BC061F6D2FE55EAC00EED055 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC061F6C2FE55EAC00EED055 /* MockData.swift */; };
 		BC061F702FE7E1F100EED055 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BC061F6F2FE7E1EE00EED055 /* Localizable.xcstrings */; };
 		BC061F742FE7EA8B00EED055 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC061F732FE7EA8B00EED055 /* PaymentViewController.swift */; };
+		BCAC16C22FF8F91800E064F9 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAC16C12FF8F91800E064F9 /* ImageLoader.swift */; };
 		BCBAC4912FF55A1B009E2C83 /* OrderFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBAC4902FF55A1A009E2C83 /* OrderFetchRequest.swift */; };
 		BCBAC4932FF55DB0009E2C83 /* OrderUpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBAC4922FF55DB0009E2C83 /* OrderUpdateRequest.swift */; };
 		BCBAC4952FF55E76009E2C83 /* OrderUpdateDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBAC4942FF55E76009E2C83 /* OrderUpdateDto.swift */; };
@@ -135,6 +136,7 @@
 		BC061F6C2FE55EAC00EED055 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		BC061F6F2FE7E1EE00EED055 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		BC061F732FE7EA8B00EED055 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
+		BCAC16C12FF8F91800E064F9 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		BCBAC4902FF55A1A009E2C83 /* OrderFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFetchRequest.swift; sourceTree = "<group>"; };
 		BCBAC4922FF55DB0009E2C83 /* OrderUpdateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderUpdateRequest.swift; sourceTree = "<group>"; };
 		BCBAC4942FF55E76009E2C83 /* OrderUpdateDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderUpdateDto.swift; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 				BCBAC49A2FF56130009E2C83 /* CartServiceImpl.swift */,
 				BCBAC4A02FF5C46F009E2C83 /* NFTServiceImpl.swift */,
 				BCBAC4B12FF7B8E7009E2C83 /* PaymentServiceImpl.swift */,
+				BCAC16C12FF8F91800E064F9 /* ImageLoader.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -699,6 +702,7 @@
 				BCF25A0B2FEABC2D004AC3F6 /* PaymentViewModel.swift in Sources */,
 				3F68069729CBBAF100B4F915 /* AppDelegate.swift in Sources */,
 				3F68069929CBBAF100B4F915 /* SceneDelegate.swift in Sources */,
+				BCAC16C22FF8F91800E064F9 /* ImageLoader.swift in Sources */,
 				0C79EE6C2A76DE2E00EE90EA /* ServicesAssemly.swift in Sources */,
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
 				3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */,

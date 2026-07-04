@@ -107,6 +107,17 @@ final class PaymentViewController: UIViewController {
             }
         }
         
+        viewModel.onImageLoaded = { [weak self] indexPath, image in
+            guard let self = self else { return }
+            
+            // Проверяем, видна ли ячейка сейчас, чтобы не делать лишнюю работу
+            if self.collectionView.indexPathsForVisibleItems.contains(indexPath) {
+                DispatchQueue.main.async {
+                    self.collectionView.reloadItems(at: [indexPath])
+                }
+            }
+        }
+        
         viewModel.onSuccess = { [weak self] in
             guard let self else { return }
             DispatchQueue.main.async {
@@ -239,8 +250,24 @@ extension PaymentViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard indexPath.item < viewModel.items.count else {
+            // Защита от рассинхронизации данных и UI
+            return UICollectionViewCell()
+        }
+        
         let cell: PaymentCell = collectionView.dequeueReusableCell(indexPath: indexPath)
-        cell.configure(with: viewModel.items[indexPath.item])
+        let item = viewModel.items[indexPath.item]
+        
+        cell.configureText(with: item)
+        if let image = viewModel.image(for: indexPath) {
+            cell.setImage(with: image)
+        } else {
+            //Если картинки нет (ещё грузится или нет вообще) - ставим системный плейсхолдер
+            guard let placeholder = UIImage(systemName: "circle") else { return cell}
+            cell.setImage(with: placeholder)
+            
+        }
+        
         return cell
     }
     
