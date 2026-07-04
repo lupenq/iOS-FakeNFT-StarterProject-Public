@@ -110,9 +110,9 @@ final class PaymentViewController: UIViewController {
         viewModel.onImageLoaded = { [weak self] indexPath, image in
             guard let self = self else { return }
             
-            // Проверяем, видна ли ячейка сейчас, чтобы не делать лишнюю работу
-            if self.collectionView.indexPathsForVisibleItems.contains(indexPath) {
-                DispatchQueue.main.async {
+            // Проверяем, видна ли ячейка сейчас, чтобы не делать лишнюю работ
+            DispatchQueue.main.async {
+                if self.collectionView.indexPathsForVisibleItems.contains(indexPath) {
                     self.collectionView.reloadItems(at: [indexPath])
                 }
             }
@@ -128,13 +128,37 @@ final class PaymentViewController: UIViewController {
             }
         }
         
-        viewModel.onError = { error in
+        viewModel.onError = { [weak self] errorMessage in
+            guard let self else { return }
+            
             DispatchQueue.main.async {
                 ProgressHUD.dismiss()
+                
+                let alertTitle = NSLocalizedString("Payment Failed", comment: "")
+                let retryTitle = NSLocalizedString("Retry", comment: "")
+                let cancelTitle = NSLocalizedString("Cancel", comment: "")
+                
+                let alert = UIAlertController(
+                    title: alertTitle,
+                    message: errorMessage,
+                    preferredStyle: .alert
+                )
+                
+                let retryAction = UIAlertAction(title: retryTitle, style: .default) { _ in
+                    ProgressHUD.show()
+                    self.viewModel.pay()
+                }
+                
+                alert.addAction(retryAction)
+                let backAction = UIAlertAction(title: cancelTitle, style: .cancel) { _ in
+                    self.navigationController?.popViewController(animated: true)
+                }
+                alert.addAction(backAction)
+                
+                self.present(alert, animated: true)
             }
         }
     }
-    
     
     // MARK: - Private Methods Actions
     
