@@ -52,6 +52,7 @@
 		BC061F702FE7E1F100EED055 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BC061F6F2FE7E1EE00EED055 /* Localizable.xcstrings */; };
 		BC061F742FE7EA8B00EED055 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC061F732FE7EA8B00EED055 /* PaymentViewController.swift */; };
 		BCAC16C22FF8F91800E064F9 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAC16C12FF8F91800E064F9 /* ImageLoader.swift */; };
+		BCAC16D62FF9482500E064F9 /* CartAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAC16D52FF9482500E064F9 /* CartAssembly.swift */; };
 		BCBAC4912FF55A1B009E2C83 /* OrderFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBAC4902FF55A1A009E2C83 /* OrderFetchRequest.swift */; };
 		BCBAC4932FF55DB0009E2C83 /* OrderUpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBAC4922FF55DB0009E2C83 /* OrderUpdateRequest.swift */; };
 		BCBAC4952FF55E76009E2C83 /* OrderUpdateDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBAC4942FF55E76009E2C83 /* OrderUpdateDto.swift */; };
@@ -137,6 +138,7 @@
 		BC061F6F2FE7E1EE00EED055 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		BC061F732FE7EA8B00EED055 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
 		BCAC16C12FF8F91800E064F9 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		BCAC16D52FF9482500E064F9 /* CartAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartAssembly.swift; sourceTree = "<group>"; };
 		BCBAC4902FF55A1A009E2C83 /* OrderFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFetchRequest.swift; sourceTree = "<group>"; };
 		BCBAC4922FF55DB0009E2C83 /* OrderUpdateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderUpdateRequest.swift; sourceTree = "<group>"; };
 		BCBAC4942FF55E76009E2C83 /* OrderUpdateDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderUpdateDto.swift; sourceTree = "<group>"; };
@@ -435,6 +437,7 @@
 				BC061DFB2FE34ED700EED055 /* CartViewController.swift */,
 				BC061F732FE7EA8B00EED055 /* PaymentViewController.swift */,
 				BCF25A0D2FEC4399004AC3F6 /* SuccessfulPaymentVC.swift */,
+				BCAC16D52FF9482500E064F9 /* CartAssembly.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -730,6 +733,7 @@
 				BCBAC4952FF55E76009E2C83 /* OrderUpdateDto.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
 				0C79EE632A76DD1900EE90EA /* RequestConstants.swift in Sources */,
+				BCAC16D62FF9482500E064F9 /* CartAssembly.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
