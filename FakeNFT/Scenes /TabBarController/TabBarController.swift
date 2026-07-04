@@ -23,19 +23,10 @@ final class TabBarController: UITabBarController {
             servicesAssembly: servicesAssembly
         )
         
-        let cartService = CartServiceImpl(networkClient: DefaultNetworkClient())
-        let nftService = NFTServiceImpl()
-        let cartViewModel = CartViewModel(nftService: nftService, cartService: cartService)
-        let paymentService = PaymentServiceImpl(client: DefaultNetworkClient(), baseURL: RequestConstants.baseURL)
-        
-        let cartController = CartViewController(viewModel: cartViewModel, paymentService: paymentService)
-        
         catalogController.tabBarItem = catalogTabBarItem
-        cartController.tabBarItem = cartTabBarItem
+        let cartController = CartAssembly.makeCartFlow()
         
-        let cartNavigationController = UINavigationController(rootViewController: cartController)
-
-        viewControllers = [catalogController, cartNavigationController]
+        viewControllers = [catalogController, cartController]
 
         view.backgroundColor = .systemBackground
     }
