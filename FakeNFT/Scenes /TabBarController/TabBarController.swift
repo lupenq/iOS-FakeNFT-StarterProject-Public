@@ -20,9 +20,8 @@ final class TabBarController: UITabBarController {
         catalogNavigationController.tabBarItem = catalogTabBarItem
 
         let profileController = ProfileAssembly.assemble()
-        let cartController = CartAssembly.makeCartFlow()
 
-        viewControllers = [catalogNavigationController, profileController, cartController]
+        viewControllers = [catalogNavigationController, profileController]
 
         view.backgroundColor = .systemBackground
     }
