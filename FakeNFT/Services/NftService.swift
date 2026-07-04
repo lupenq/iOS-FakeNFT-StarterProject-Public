@@ -2,6 +2,7 @@ import Foundation
 
 typealias NftCompletion = (Result<Nft, Error>) -> Void
 
+
 protocol NftService {
     func loadNft(id: String, completion: @escaping NftCompletion)
 }

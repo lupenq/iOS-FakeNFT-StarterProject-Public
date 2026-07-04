@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 protocol CartCellDelegate: AnyObject {
     func cartCellDidButtonDeleteTapped(_ cell: CartCell)
@@ -75,6 +76,7 @@ final class CartCell: UITableViewCell, ReuseIdentifying {
     private var nftRating: Int = 0 {
         didSet { updateStars() }
     }
+    private var currentImageUrl: URL?
     
     // MARK: - Initialisers
     
@@ -89,7 +91,35 @@ final class CartCell: UITableViewCell, ReuseIdentifying {
         nil
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        nftImageView.image = nil
+        nftRating = 0
+        currentImageUrl = nil
+    }
+    
     // MARK: - Public Methods
+    
+    func configure(with item: NFTUIItem) {
+        nftTitleLabel.text = item.title
+        nftPriceValueLabel.text = "\(item.price) ETH"
+        nftRating = item.rating
+        
+        guard let url = item.imageUrl else { return }
+        currentImageUrl = url
+        nftImageView.kf.setImage(with: url, placeholder: nil, options: nil, progressBlock: nil) { [weak self] result in
+            guard let self else { return }
+            
+            if self.currentImageUrl == url {
+                switch result {
+                case .success(let value):
+                    self.nftImageView.image = value.image
+                case .failure(let error):
+                    print("❌ Failed to load image: \(error)")
+                }
+            }
+        }
+    }
     
     func configureCell(with item: NFTItem) {
         nftImageView.image = item.image

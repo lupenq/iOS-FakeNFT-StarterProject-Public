@@ -14,10 +14,6 @@ enum NavigationIcon: String {
 
 final class PaymentViewController: UIViewController {
     
-    // MARK: - Public Properties
-    
-    
-    
     // MARK: - Private Properties
     
     private lazy var collectionView: UICollectionView = {
@@ -72,6 +68,11 @@ final class PaymentViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    init(paymentService: PaymentService, nftIds: [String]) {
+        self.viewModel = PaymentViewModel(paymentService: paymentService, nftIds: nftIds)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         nil
@@ -88,6 +89,9 @@ final class PaymentViewController: UIViewController {
         setupConstraints()
         setupCollectionView()
         bindViewModel()
+        
+        ProgressHUD.show()
+        viewModel.loadCurrencies()
     }
     
     // MARK: - Public Methods
@@ -95,29 +99,66 @@ final class PaymentViewController: UIViewController {
     // MARK: - BindViewModel
     
     private func bindViewModel() {
-        viewModel.onSuccess = { [weak self] in
-            ProgressHUD.dismiss()
-            let successVC = SuccessfulPaymentVC()
-            successVC.hidesBottomBarWhenPushed = true
-            self?.navigationController?.pushViewController(successVC, animated: true)
-        }
-        viewModel.onError = { [weak self] retryHandler in
-            ProgressHUD.dismiss()
-            let alertTitle = NSLocalizedString("Payment Failed", comment: "")
-            let retryTitle = NSLocalizedString("Retry", comment: "")
-            let cancelTitle = NSLocalizedString("Cancel", comment: "")
-            
-            let alert = UIAlertController(title: alertTitle, message: "", preferredStyle: .alert)
-            
-            let retry = UIAlertAction(title: retryTitle, style: .default) { _ in
-                retryHandler()
+        viewModel.onItemsLoaded = { [weak self] in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                ProgressHUD.dismiss()
+                self.collectionView.reloadData()
             }
-            alert.addAction(retry)
-            alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel))
-            self?.present(alert, animated: true)
+        }
+        
+        viewModel.onImageLoaded = { [weak self] indexPath, image in
+            guard let self = self else { return }
+            
+            // Проверяем, видна ли ячейка сейчас, чтобы не делать лишнюю работ
+            DispatchQueue.main.async {
+                if self.collectionView.indexPathsForVisibleItems.contains(indexPath) {
+                    self.collectionView.reloadItems(at: [indexPath])
+                }
+            }
+        }
+        
+        viewModel.onSuccess = { [weak self] in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                ProgressHUD.dismiss()
+                let successVC = SuccessfulPaymentVC()
+                successVC.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(successVC, animated: true)
+            }
+        }
+        
+        viewModel.onError = { [weak self] errorMessage in
+            guard let self else { return }
+            
+            DispatchQueue.main.async {
+                ProgressHUD.dismiss()
+                
+                let alertTitle = NSLocalizedString("Payment Failed", comment: "")
+                let retryTitle = NSLocalizedString("Retry", comment: "")
+                let cancelTitle = NSLocalizedString("Cancel", comment: "")
+                
+                let alert = UIAlertController(
+                    title: alertTitle,
+                    message: errorMessage,
+                    preferredStyle: .alert
+                )
+                
+                let retryAction = UIAlertAction(title: retryTitle, style: .default) { _ in
+                    ProgressHUD.show()
+                    self.viewModel.pay()
+                }
+                
+                alert.addAction(retryAction)
+                let backAction = UIAlertAction(title: cancelTitle, style: .cancel) { _ in
+                    self.navigationController?.popViewController(animated: true)
+                }
+                alert.addAction(backAction)
+                
+                self.present(alert, animated: true)
+            }
         }
     }
-    
     
     // MARK: - Private Methods Actions
     
@@ -233,8 +274,24 @@ extension PaymentViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard indexPath.item < viewModel.items.count else {
+            // Защита от рассинхронизации данных и UI
+            return UICollectionViewCell()
+        }
+        
         let cell: PaymentCell = collectionView.dequeueReusableCell(indexPath: indexPath)
-        cell.configureCell(with: viewModel.items[indexPath.item])
+        let item = viewModel.items[indexPath.item]
+        
+        cell.configureText(with: item)
+        if let image = viewModel.image(for: indexPath) {
+            cell.setImage(with: image)
+        } else {
+            //Если картинки нет (ещё грузится или нет вообще) - ставим системный плейсхолдер
+            guard let placeholder = UIImage(systemName: "circle") else { return cell}
+            cell.setImage(with: placeholder)
+            
+        }
+        
         return cell
     }
     
@@ -266,9 +323,4 @@ extension PaymentViewController: UITextViewDelegate {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
         return false
     }
-}
-
-
-#Preview {
-    PaymentViewController(viewModel: PaymentViewModel())
 }

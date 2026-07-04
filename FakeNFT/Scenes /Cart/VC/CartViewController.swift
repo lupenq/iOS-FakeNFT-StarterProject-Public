@@ -6,13 +6,9 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class CartViewController: UIViewController {
-    
-    // MARK: - Public Properties
-    
-    let servicesAssembly: ServicesAssembly
-    
     
     // MARK: - Private Properties
     
@@ -80,12 +76,13 @@ final class CartViewController: UIViewController {
     }()
     
     private let viewModel: CartViewModel
+    private let paymentService: PaymentService
     
     // MARK: - Initialisers
     
-    init(servicesAssembly: ServicesAssembly, viewModel: CartViewModel) {
-        self.servicesAssembly = servicesAssembly
+    init(viewModel: CartViewModel, paymentService: PaymentService) {
         self.viewModel = viewModel
+        self.paymentService = paymentService
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -104,6 +101,8 @@ final class CartViewController: UIViewController {
         setupTableView()
         setupBindings()
         
+        ProgressHUD.show()
+        viewModel.loadCart()
         viewModel.updateTotal()
     }
     
@@ -122,9 +121,8 @@ final class CartViewController: UIViewController {
     // MARK: - Private Methods
     
     @objc private func payButtonTapped() {
-        let paymentViewModel = PaymentViewModel()
             
-        let paymentVC = PaymentViewController(viewModel: paymentViewModel)
+        let paymentVC = PaymentViewController(paymentService: paymentService, nftIds: viewModel.items.map { $0.id })
         paymentVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(paymentVC, animated: true)
     }
@@ -165,7 +163,14 @@ final class CartViewController: UIViewController {
             guard let self else { return }
             self.cartTableView.reloadData()
             self.emptyLabel.isHidden = !self.viewModel.items.isEmpty
+            ProgressHUD.dismiss()
         }
+        
+        viewModel.onLoadError = { error in
+            ProgressHUD.dismiss()
+            ProgressHUD.showError(error.localizedDescription)
+        }
+        
         viewModel.onTotalUpdated = { [weak self] count, total in
             self?.nftCount.text = count
             self?.nftTotalPrice.text = total
@@ -236,7 +241,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartCell = tableView.dequeueReusableCell()
         let item = viewModel.item(at: indexPath.row)
-        cell.configureCell(with: item)
+        cell.configure(with: item)
         cell.delegate = self
         return cell
     }
@@ -264,13 +269,15 @@ extension CartViewController: CartCellDelegate {
         let item = viewModel.item(at: indexPath.row)
         
         let deleteModalVC = DeleteModalViewController(
-            image: item.image,
+            imageURL: item.imageUrl,
+            title: item.title,
             onDelete: { [weak self] in
                 guard let self else { return }
                 self.viewModel.removeItem(at: indexPath.row)
                 self.cartTableView.reloadData()
             }
         )
+        
         deleteModalVC.modalPresentationStyle = .overFullScreen
         deleteModalVC.modalTransitionStyle = .crossDissolve
         present(deleteModalVC, animated: true)

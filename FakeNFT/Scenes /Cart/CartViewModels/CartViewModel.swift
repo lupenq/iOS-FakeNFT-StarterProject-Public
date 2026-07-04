@@ -13,6 +13,7 @@ final class CartViewModel {
     
     var onItemsUpdated: (() -> Void)?
     var onTotalUpdated: ((String, String) -> Void)?
+    var onLoadError: ((Error) -> Void)?
     
     // MARK: - Public Properties
     
@@ -20,11 +21,53 @@ final class CartViewModel {
     
     // MARK: - Private Properties
     
-    private(set) var items = MockData.items
+    //private(set) var items = MockData.items
+    private(set) var items: [NFTUIItem] = []
+    private let nftService: NFTService
+    private let cartService: CartService
+    
+    init(nftService: NFTService, cartService: CartService) {
+        self.nftService = nftService
+        self.cartService = cartService
+    }
     
     // MARK: - Public Methods
     
-    func item(at index: Int) -> NFTItem { items[index] }
+    func loadCart() {
+        
+        cartService.fetchCart { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .success(let order):
+                let ids = order.nfts
+                self.nftService.fetchNFTs(with: ids) { result in
+                    switch result {
+                    case .success(let nfts):
+                        self.items = nfts.map { nft in
+                            NFTUIItem(
+                                id: nft.id,
+                                image: nil,
+                                imageUrl: nft.imageUrl,
+                                title: nft.name,
+                                rating: nft.rating ?? 0,
+                                price: nft.price
+                            )
+                        }
+                        self.notifyUpdates()
+                    case .failure(let error):
+                        self.onLoadError?(error)
+                    }
+                }
+                
+            case .failure(let error):
+                self.onLoadError?(error)
+            }
+        }
+    }
+    
+    
+    func item(at index: Int) -> NFTUIItem { items[index] }
     
     func removeItem(at index: Int) {
         guard items.indices.contains(index) else { return }
