@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OrderUpdateRequest: NetworkRequest {
+struct CartOrderUpdateRequest: NetworkRequest {
     let endpoint: URL?
     let httpMethod: HttpMethod = .put
     let dto: Dto?

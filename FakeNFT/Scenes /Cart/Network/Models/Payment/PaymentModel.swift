@@ -58,17 +58,6 @@ struct PutOrdersRequest: NetworkRequest {
     }
 }
 
-struct OrderRequest: NetworkRequest {
-    var httpMethod: HttpMethod { .get }
-    var dto: Dto? { EmptyDto() }
-    
-    var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1")
-    }
-    
-    var nfts: [String]?
-}
-
 struct CurrenciesRequest: NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Dto? { EmptyDto() }

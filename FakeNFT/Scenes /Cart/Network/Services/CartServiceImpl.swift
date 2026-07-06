@@ -27,7 +27,7 @@ final class CartServiceImpl: CartService {
     }
     
     func updateCart(nftIds: [String], completion: @escaping (Result<OrderResponse, Error>) -> Void) {
-        let request = OrderUpdateRequest(orderId: orderId, nfts: nftIds)
+        let request = CartOrderUpdateRequest(orderId: orderId, nfts: nftIds)
         networkClient.send(request: request, type: OrderResponse.self, completionQueue: .main, onResponse: completion)
     }
     
