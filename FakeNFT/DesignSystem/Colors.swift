@@ -37,10 +37,14 @@ extension UIColor {
     static let background = UIColor.white
 
     // Text Colors
-    static let textPrimary = UIColor.black
+    static let textPrimary = UIColor { traits in
+        traits.userInterfaceStyle == .dark ? .yaBlackDark : .yaBlackLight
+    }
     static let textSecondary = UIColor.gray
     static let textOnPrimary = UIColor.white
     static let textOnSecondary = UIColor.black
+    static let greenUniversal = UIColor(hexString: "#1C9F00")
+    static let redUniversal = UIColor(hexString: "#F56B6C")
 
     private static let yaBlackLight = UIColor(hexString: "1A1B22")
     private static let yaBlackDark = UIColor.white
@@ -64,4 +68,12 @@ extension UIColor {
         ? .yaBlackDark
         : .yaBlackLight
     }
+
+    // Rating
+    static let ypRatingActive = UIColor(hexString: "#FEEF0D")
+    static let ypRatingInactive = UIColor.systemGray5
+
+    // Like button
+    static let ypLikeActive = UIColor(hexString: "#F56B6C")
+    static let ypLikeInactive = UIColor.white
 }
